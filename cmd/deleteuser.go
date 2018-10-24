@@ -22,9 +22,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//var cfgFile string
-var password string
-
 // deleteuserCmd represents the deleteuser command
 var deleteuserCmd = &cobra.Command{
 	Use:   "deleteuser",
@@ -37,38 +34,34 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("deleteuser called")
-		deleteuser(password)
+		deleteuser()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(deleteuserCmd)
 
-	registerCmd.Flags().StringVarP(&password, "password", "p", "", "user's password")
 }
-func deleteuser(password string) {
-	curUser := datarw.GetCurUser()
-	if curUser == nil { //GetCurUser可以返回一个指针
+func deleteuser() {
+	curUser, hasCurUser := datarw.GetCurUser()
+	if hasCurUser == true { //是否已登陆
 		fmt.Println("isn't login,please use command login")
 		return
 	}
-	if password == "" {
-		fmt.Println("please input password")
-		return
-	}
-	if password == curUser.Password {
-		users := datarw.GetUsers()
-		for index, user := range users {
-			if user.Name == curUser.Name {
-				users = append(users[:index], users[index+1:]...)
-				datarw.SaveUsers(users)
-				fmt.Println("User:", curUser.Name, " has been deleted")
-				return
-			}
-		}
-		fmt.Println("error: unexpected to execute")
 
-	} else {
-		fmt.Println("password incorrect")
+	users := datarw.GetUsers()
+	for index, user := range users {
+		if user.Name == curUser.Name {
+			users = append(users[:index], users[index+1:]...)
+			datarw.SaveUsers(users)
+			fmt.Println("User:", curUser.Name, " has been deleted")
+
+			/*会议相关*/
+
+			return
+		}
 	}
+
+	fmt.Println("error: unexpected to execute")
+
 }

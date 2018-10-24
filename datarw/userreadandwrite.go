@@ -39,11 +39,14 @@ func SaveUsers(usersToSave []entity.User) {
 
 }
 
-// GetCurUsers get a entity.User from a file
-func GetCurUser() entity.User {
+// GetCurUser get a entity.User from a file
+func GetCurUser() (entity.User, bool) {
 	filePath := "datarw/CurUser.json"
 	var user entity.User
-	if existFile(filePath) {
+
+	var hasCurUser bool
+	if hasCurUser = existFile(filePath); hasCurUser {
+
 		josnStr, err := ioutil.ReadFile(filePath)
 		checkError(err)
 
@@ -51,11 +54,11 @@ func GetCurUser() entity.User {
 		checkError(err)
 	}
 
-	return user
+	return user, hasCurUser
 
 }
 
-// SaveCurUsers save a entity.User to a file
+// SaveCurUser save a entity.User to a file
 func SaveCurUser(userToSave entity.User) {
 	filePath := "datarw/CurUser.json"
 	//清空原文件

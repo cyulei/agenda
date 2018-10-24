@@ -25,7 +25,7 @@ import (
 )
 
 //var cfgFile string
-var name, password, email, phone string
+var name, registerPassword, email, phone string
 
 // registerCmd represents the register command
 var registerCmd = &cobra.Command{
@@ -39,7 +39,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		register(name, password, email, phone)
+		register(name, registerPassword, email, phone)
 	},
 }
 
@@ -57,10 +57,11 @@ func init() {
 	// registerCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	registerCmd.Flags().StringVarP(&name, "name", "n", "", "user's name")
-	registerCmd.Flags().StringVarP(&password, "password", "p", "", "user's password")
+	registerCmd.Flags().StringVarP(&registerPassword, "password", "p", "", "user's password")
 	registerCmd.Flags().StringVarP(&email, "email", "e", "", "user's email")
 	registerCmd.Flags().StringVarP(&phone, "phone", "e", "", "user's phone")
 }
+
 func register(name string, password string, email string, phone string) {
 	if isValidName(name) && isValidPassword(password) && isValidEmail(email) && isValidPhone(phone) {
 		users := datarw.GetUsers()
