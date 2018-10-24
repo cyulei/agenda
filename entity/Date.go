@@ -21,7 +21,7 @@ func IsValid(d Date) bool {
 			if d.Day > 29 {
 				return false
 			}
-		} else {
+		} else { //not leap
 			if d.Day > 28 {
 				return false
 			}

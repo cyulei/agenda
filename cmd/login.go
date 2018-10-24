@@ -17,21 +17,33 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/cyulei/agenda/datarw"
 	"github.com/spf13/cobra"
 )
 
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
-	Use:   "login",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "login -u [username] -p [password]",
+	Short: "log in",
+	Long:  `Input command mode like : login -u username -p password`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("login called")
+		username, _ := cmd.Flags().GetString("username")
+		password, _ := cmd.Flags().GetString("password")
+		//fmt.Println(username, password)
+		//检测是否已经存在用户
+		users := datarw.GetUsers()
+		for i := 0; i < len(users); i++ {
+			if users[i].Name == username {
+				//得到用户密码是否正确
+				if users[i].Password == password {
+					//标示用户已经登陆
+					fmt.Println("login success!")
+					return
+				}
+				fmt.Println("password erorr")
+			}
+		}
+		fmt.Println("username don't exist")
 	},
 }
 
@@ -47,4 +59,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// loginCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	loginCmd.Flags().StringP("username", "u", "", "user name")
+	loginCmd.Flags().StringP("password", "p", "", "user password")
 }
