@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/cyulei/Go-agenda/entity"
+	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
 

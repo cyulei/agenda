@@ -29,9 +29,8 @@ func GetUsers() []entity.User {
 func SaveUsers(usersToSave []entity.User) {
 	filePath := "datarw/Users.json"
 	//清空原文件
-	if existFile(filePath) {
-		os.Truncate(filePath, 0)
-	}
+	os.Truncate(filePath, 0)
+
 	//转为json串
 	josnStr, err := json.Marshal(usersToSave)
 	checkError(err)
@@ -65,9 +64,7 @@ func GetCurUser() *entity.User {
 func SaveCurUser(userToSave *entity.User) {
 	filePath := "datarw/CurUser.json"
 	//清空原文件
-	if existFile(filePath) {
-		os.Truncate(filePath, 0)
-	}
+	os.Truncate(filePath, 0)
 
 	if userToSave != nil {
 		//转为json串
