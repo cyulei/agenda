@@ -24,9 +24,11 @@ import (
 var logoutCmd = &cobra.Command{
 	Use:   "logout",
 	Short: "log out",
-	Long:  `Input command mode like : log_out`,
+	Long:  `Input command mode like : logout`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("logout called")
+		//确定当前是登陆状态
+		//登出
 	},
 }
 

@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/cyulei/agenda/datarw"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +29,21 @@ var loginCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		username, _ := cmd.Flags().GetString("username")
 		password, _ := cmd.Flags().GetString("password")
-		fmt.Println(username, password)
+		//fmt.Println(username, password)
+		//检测是否已经存在用户
+		users := datarw.GetUsers()
+		for i := 0; i < len(users); i++ {
+			if users[i].Name == username {
+				//得到用户密码是否正确
+				if users[i].Password == password {
+					//标示用户已经登陆
+					fmt.Println("login success!")
+					return
+				}
+				fmt.Println("password erorr")
+			}
+		}
+		fmt.Println("username don't exist")
 	},
 }
 
