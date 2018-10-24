@@ -16,9 +16,10 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
+	"os"
 	"github.com/cyulei/Go-agenda/entity"
+
 	"github.com/spf13/cobra"
 )
 
@@ -41,7 +42,11 @@ var cancel_title string
 
 func init() {
 	rootCmd.AddCommand(cancelmeetingCmd)
+
 	cancelmeetingCmd.Flags().StringVarP(&cancel_title, "title", "t", "", "yes,even stupid gay knows what it means")
+
+	
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

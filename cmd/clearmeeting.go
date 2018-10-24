@@ -16,28 +16,50 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
+
+var info_show bool
 
 // clearmeetingCmd represents the clearmeeting command
 var clearmeetingCmd = &cobra.Command{
 	Use:   "clearmeeting",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Current user can clear meetings which he sponsors",
+	Long: `Current user can clear all meetings that he sponsors, for example:\n
+		clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("clearmeeting called")
+		var delete_meetings []string
+		//get current user
+		var current_user entity.User
+		current_user = get_current_user()
+		//get all existed meetings
+		meetings := get_all_meetings()
+		//meetings after delete
+		var final_meetings []entity.Meeting
+		for i, j := range meetings {
+			if j.Sponsor == current_user.Name {
+				delete_meetings = append(delete_meetings, j.Title)
+			} else {
+				final_meetings = append(j)
+			}
+		}
+
+		if info_show {
+			for i, j := range delete_meetings {
+				fmt.Println("deletemeeting" + strconv.Itoa(i) + ": " + j)
+			}
+		}
+		fmt.Println("clearmeeting finished")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(clearmeetingCmd)
 
+	rootCmd.AddCommand(clearmeetingCmd)
+	clearmeetingCmd.Flags().BoolVarP(&info_show, "info", "i", false, "show meetings cleared")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
