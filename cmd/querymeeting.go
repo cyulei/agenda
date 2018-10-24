@@ -16,7 +16,9 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/cyulei/Go-agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -32,12 +34,21 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("querymeeting called")
+		runQuery()
 	},
 }
+var query_title string
+var query_sDate string
+var query_eDate string
+var query_all bool
 
 func init() {
 	rootCmd.AddCommand(querymeetingCmd)
-
+	querymeetingCmd.Flags().StringVarP(&query_title, "title", "t", "", "the title you want to query")
+	querymeetingCmd.Flags().StringVarP(&query_sDate, "start time", "s", "", "format yyyy-mm-dd-hh:mm")
+	querymeetingCmd.Flags().StringVarP(&query_eDate, "end time", "e", "", "format yyyy-mm-dd-hh:mm")
+	querymeetingCmd.Flags().BoolVarP(&query_all, "all user or current user", "a", false, "query meetings "+
+		"all user has been appeared,if you want query for current user,please don't use it")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -47,4 +58,158 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// querymeetingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+func runQuery() {
+	//	load
+
+	var meetings = loadMeetings()
+	var usr = getCurrentUser()
+
+	var res = make([]entity.Meeting, 1) //to display
+
+	//parse the arguments
+	var title_limited = query_title != ""
+	//var time_limited = false
+	var start_limited = false
+	var end_limited = false
+	var usr_limited = query_all
+
+	var sdate = entity.Date{}
+	var edate = entity.Date{}
+
+	if query_sDate != "" {
+		start_limited = true
+	} else if query_eDate != "" {
+		end_limited = true
+	}
+	//time_limited = start_limited || end_limited
+
+	if len(query_sDate) != 16 || len(query_eDate) != 16 {
+		println("date format error,yyyy-mm-dd-hh:mm")
+		return
+	}
+	if start_limited {
+		var err, err1, err2, err3, err4 error
+		sdate.Year, err = strconv.Atoi((string)(query_sDate[0:4]))
+		sdate.Month, err1 = strconv.Atoi(query_sDate[5:7])
+		sdate.Day, err2 = strconv.Atoi(query_sDate[8:10])
+		sdate.Hour, err3 = strconv.Atoi(query_sDate[11:13])
+		sdate.Minute, err4 = strconv.Atoi(query_sDate[14:16])
+
+		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
+			println("date format error,yyyy-mm-dd-hh:mm")
+			return
+		}
+	}
+	if start_limited {
+		var err, err1, err2, err3, err4 error
+		edate.Year, err = strconv.Atoi((string)(query_eDate[0:4]))
+		edate.Month, err1 = strconv.Atoi(query_eDate[5:7])
+		edate.Day, err2 = strconv.Atoi(query_eDate[8:10])
+		edate.Hour, err3 = strconv.Atoi(query_eDate[11:13])
+		edate.Minute, err4 = strconv.Atoi(query_eDate[14:16])
+
+		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
+			println("date format error,yyyy-mm-dd-hh:mm")
+			return
+		}
+	}
+	//end
+	//start querying
+
+	for _, meeting := range meetings {
+		if title_limited && meeting.Title != query_title { //has limitation on title but not satisfied
+			continue
+		}
+		//no title limitation or satisfied
+		if start_limited && false { //has limitation on start date but not satisfied
+			continue
+		}
+		if end_limited && false {
+			continue
+		}
+		if usr_limited {
+
+			if usr.Name == meeting.Sponsor {
+
+			} else {
+				var f = false
+				for _, parts := range meeting.Participators {
+					if parts == usr.Name { //satisfied we can display it
+						f = true
+						break
+					}
+				}
+				if f == false { // not satisfied we cannot display this meeting
+					continue
+				}
+			}
+		}
+		//all request satisfied
+		res = append(res, meeting)
+	}
+	DisplayMeeting(res)
+}
+
+func DisplayMeeting(mt []entity.Meeting) {
+
+	standardMeetingLength := 5 + 7
+	standardNameLength := 7 + 5
+	//standardTimeLength := 16
+	println("-----------------Display Meeting---------------------------")
+	println("Title\t\tSponsor\t\tStart Time\t\tEnd Time\t\tParticipators")
+	for _, meeting := range mt {
+		print(meeting.Title)
+		for j := 4; j <= standardMeetingLength; j += 4 {
+			if len(meeting.Title) < j {
+				for k := j - 4; k < standardMeetingLength; k += 4 {
+					print("\t")
+				}
+			}
+		}
+		//print("\n")
+		print(meeting.Sponsor)
+		for j := 4; j <= standardNameLength; j += 4 {
+			if len(meeting.Sponsor) < j {
+				for k := j - 4; k < standardNameLength; k += 4 {
+					print("\t")
+				}
+			}
+		}
+		//print("\n")
+		sd := meeting.Startdate
+		ed := meeting.Enddate
+		year := sd.Year
+		month := sd.Month
+		day := sd.Day
+		hour := sd.Hour
+		minute := sd.Minute
+		//var info []byte
+		info := fmt.Sprintf("%04d-%02d-%02d-%02d:%02d", year, month, day, hour, minute)
+		//fmt.sprintf(info, "%04d-%02d-%02d-%02d:%02d", year, month, day, hour, minute)
+		print(info)
+
+		year = ed.Year
+		month = ed.Month
+		day = ed.Day
+		hour = ed.Hour
+		minute = ed.Minute
+
+		info = fmt.Sprintf("%04d-%02d-%02d-%02d:%02d", year, month, day, hour, minute)
+		print(info)
+
+		for _, p := range meeting.Participators {
+			print(p)
+			for j := 4; j <= standardNameLength; j += 4 {
+				if len(p) < j {
+					for k := j - 4; k < standardNameLength; k += 4 {
+						print("\t")
+					}
+				}
+			}
+		}
+
+		println()
+	}
+	println("-----------------------------------------------------------")
 }
