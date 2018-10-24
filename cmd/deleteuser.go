@@ -17,6 +17,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/cyulei/agenda/entity"
+
 	"github.com/cyulei/agenda/datarw"
 
 	"github.com/spf13/cobra"
@@ -25,13 +27,12 @@ import (
 // deleteuserCmd represents the deleteuser command
 var deleteuserCmd = &cobra.Command{
 	Use:   "deleteuser",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "delete CurUser",
+	Long: `deleteuser:delete CurUser and logout
+	you must login before deleteuser
+	For example:
+	agenda deleteuser  			:delete CurUser and logout
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("deleteuser called")
 		deleteuser()
@@ -43,20 +44,26 @@ func init() {
 
 }
 func deleteuser() {
-	curUser, hasCurUser := datarw.GetCurUser()
-	if hasCurUser == true { //是否已登陆
+	curUser := datarw.GetCurUser()
+	if curUser != nil { //是否已登陆
 		fmt.Println("isn't login,please use command login")
 		return
 	}
 
+	//获取所有用户
 	users := datarw.GetUsers()
+
 	for index, user := range users {
 		if user.Name == curUser.Name {
 			users = append(users[:index], users[index+1:]...)
 			datarw.SaveUsers(users)
+			datarw.SaveCurUser(nil) //登出
 			fmt.Println("User:", curUser.Name, " has been deleted")
 
 			/*会议相关*/
+
+			cancleAllmeeting(*curUser) //当前用户取消所有其创建的会议
+			exitAllmeeting(*curUser)   //当前用户退出所有会议
 
 			return
 		}
@@ -64,4 +71,50 @@ func deleteuser() {
 
 	fmt.Println("error: unexpected to execute")
 
+}
+
+//取消user创建的会议
+func cancleAllmeeting(user entity.User) {
+	meetings := datarw.GetMeetings()
+	var newMeetings []entity.Meeting
+
+	for _, meeting := range meetings { //遍历会议
+		if meeting.Sponsor != user.Name {
+			newMeetings = append(newMeetings, meeting)
+		}
+	}
+	datarw.SaveMeetings(newMeetings)
+}
+
+//user退出所有会议
+func exitAllmeeting(user entity.User) {
+	meetings := datarw.GetMeetings()
+
+	for _, meeting := range meetings { //遍历会议
+		for i, participator := range meeting.Participators { //遍历一个会议的成员
+			if participator == user.Name {
+				meeting.Participators = append(meeting.Participators[:i], meeting.Participators[i+1:]...)
+
+				break //!!!
+			}
+		}
+
+	}
+
+	meetings = deleteEmptyMeeting(meetings)
+
+	datarw.SaveMeetings(meetings)
+
+}
+
+func deleteEmptyMeeting(meetings []entity.Meeting) []entity.Meeting {
+	var newMeetings []entity.Meeting
+
+	for _, meeting := range meetings { //当会议成员不为空时，保留会议
+		if len(meeting.Participators) != 0 {
+			newMeetings = append(newMeetings, meeting)
+		}
+	}
+
+	return newMeetings
 }

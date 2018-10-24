@@ -17,34 +17,57 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/cyulei/agenda/datarw"
 	"github.com/spf13/cobra"
 )
 
 // queryuserCmd represents the queryuser command
 var queryuserCmd = &cobra.Command{
 	Use:   "queryuser",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Show name,email,phone of users",
+	Long: `queryuser:Show name,email,phone of users
+	you must login before query
+	For example:
+	agenda queryuser  			:show all registered users' information
+	agenda queryuser -n user1 	:show user1' information if registered
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("queryuser called")
+		queryuser()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(queryuserCmd)
+	queryuserCmd.Flags().StringVarP(&queryuserName, "name", "n", "", "user's name")
+}
 
-	// Here you will define your flags and configuration settings.
+var queryuserName string
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// queryuserCmd.PersistentFlags().String("foo", "", "A help for foo")
+func queryuser() {
+	curUser := datarw.GetCurUser()
+	if curUser != nil { //是否已登陆
+		fmt.Println("isn't login,please use command login first")
+		return
+	}
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// queryuserCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	//获取所有用户
+	users := datarw.GetUsers()
+
+	if queryuserName == "" { //查询所有用户（因为已登录，所以不可能没有用户）
+		fmt.Println("\tUsername\temail\tphone")
+		for _, user := range users {
+			fmt.Println("\t", user.Name, "\t", user.Email, "\t", user.Phone)
+		}
+	} else { //查询单个用户
+		for _, user := range users {
+			if user.Name == queryuserName {
+				fmt.Println("\t", user.Name, "\t", user.Email, "\t", user.Phone)
+				return //查询成功
+			}
+		}
+		fmt.Println(queryuserName, "isn't registered") //查询失败
+
+	}
+
 }
