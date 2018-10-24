@@ -18,6 +18,7 @@ import (
 	"fmt"
 
 	"github.com/cyulei/agenda/datarw"
+	"github.com/modood/table" //以表格形式输出
 	"github.com/spf13/cobra"
 )
 
@@ -32,8 +33,9 @@ var queryuserCmd = &cobra.Command{
 	agenda queryuser -n user1 	:show user1' information if registered
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("queryuser called")
+
 		queryuser()
+		fmt.Println("queryuser complete")
 	},
 }
 
@@ -46,7 +48,7 @@ var queryuserName string
 
 func queryuser() {
 	curUser := datarw.GetCurUser()
-	if curUser != nil { //是否已登陆
+	if curUser == nil { //是否已登陆
 		fmt.Println("isn't login,please use command login first")
 		return
 	}
@@ -55,10 +57,9 @@ func queryuser() {
 	users := datarw.GetUsers()
 
 	if queryuserName == "" { //查询所有用户（因为已登录，所以不可能没有用户）
-		fmt.Println("\tUsername\temail\tphone")
-		for _, user := range users {
-			fmt.Println("\t", user.Name, "\t", user.Email, "\t", user.Phone)
-		}
+
+		fmt.Println(table.Table(users))
+
 	} else { //查询单个用户
 		for _, user := range users {
 			if user.Name == queryuserName {

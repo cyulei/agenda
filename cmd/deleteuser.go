@@ -45,7 +45,7 @@ func init() {
 }
 func deleteuser() {
 	curUser := datarw.GetCurUser()
-	if curUser != nil { //是否已登陆
+	if curUser == nil { //是否已登陆
 		fmt.Println("isn't login,please use command login")
 		return
 	}
