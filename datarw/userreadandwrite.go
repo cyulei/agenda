@@ -1,0 +1,94 @@
+package datarw
+
+//"github.com/cyulei/agenda/cmd"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+
+	"github.com/cyulei/agenda/entity"
+)
+
+// GetUsers get a []entity.User from a file
+func GetUsers() []entity.User {
+	filePath := "datarw/Users.json"
+	var users []entity.User
+	if existFile(filePath) {
+		josnStr, err := ioutil.ReadFile(filePath)
+		checkError(err)
+
+		err = json.Unmarshal(josnStr, &users)
+		checkError(err)
+	}
+
+	return users
+}
+
+// SaveUsers save a []entity.User to a file
+func SaveUsers(usersToSave []entity.User) {
+	filePath := "datarw/Users.json"
+	//清空原文件
+	os.Truncate(filePath, 0)
+
+	//转为json串
+	josnStr, err := json.Marshal(usersToSave)
+	checkError(err)
+	err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
+	checkError(err)
+
+}
+
+// GetCurUsers get a entity.User from a file
+func GetCurUser() entity.User {
+	filePath := "datarw/CurUser.json"
+	var user entity.User
+	if existFile(filePath) {
+		josnStr, err := ioutil.ReadFile(filePath)
+		checkError(err)
+
+		err = json.Unmarshal(josnStr, &user)
+		checkError(err)
+	}
+
+	return user
+
+}
+
+// SaveCurUsers save a entity.User to a file
+func SaveCurUser(userToSave entity.User) {
+	filePath := "datarw/CurUser.json"
+	//清空原文件
+	os.Truncate(filePath, 0)
+
+	//转为json串
+	josnStr, err := json.Marshal(userToSave)
+	checkError(err)
+	err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
+	checkError(err)
+
+}
+func checkError(err error) {
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+}
+func existFile(path string) bool {
+	_, err := os.Stat(path) //os.Stat获取文件信息
+	if err != nil {
+		if os.IsExist(err) {
+			return true
+		}
+		return false
+	}
+	return true
+}
+
+// TestUser is func to test
+func TestUser() {
+	users := GetUsers()
+	user1 := entity.User{"456", "456", "456", "4588"}
+	user2 := entity.User{"456", "456", "456", "4588"}
+	users = append(users, user1, user2)
+	SaveUsers(users)
+}
