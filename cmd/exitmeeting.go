@@ -17,7 +17,9 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/cyulei/Go-agenda/entity"
+	"github.com/cyulei/agenda/datarw"
+
+	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -52,34 +54,16 @@ func init() {
 	// is called directly, e.g.:
 	// exitmeetingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-func loadMeetings() []entity.Meeting {
-	res := make([]entity.Meeting, 2)
-	start := entity.Date{2008, 1, 1, 1, 1}
-	end := entity.Date{2018, 12, 23, 1, 1}
 
-	sponser := "liping"
-
-	participaters := []string{"liping", "daming", "xiaohong"}
-	exit_title := "hello world"
-	res[0] = entity.Meeting{sponser, participaters, start, end, exit_title}
-	res[1] = entity.Meeting{sponser, participaters, start, end, exit_title}
-	//res->
-	return res
-}
-
-func saveMeetings(meetings []entity.Meeting) {
-
-}
-func getCurrentUser() entity.User {
-	return entity.User{}
-}
-func setParticipators(mt *entity.Meeting, parts []string) {
-
-}
 func runExit() {
 	//load data
-	usr := getCurrentUser().Name
-	meetings := loadMeetings()
+	curUsr := datarw.GetCurUser()
+	if curUsr == nil {
+		println("please login first ")
+		return
+	}
+	usr := curUsr.Name
+	meetings := datarw.GetMeetings()
 	var res []entity.Meeting
 	//check title
 	if exit_title == "empty title" {
@@ -126,15 +110,16 @@ func runExit() {
 
 	}
 	if meetingExist == false {
-		fmt.Println("no such meeting,please check you title spelling")
+		fmt.Println("no such meeting,", exit_title, "please check you title spelling")
 		//saveMeetings(meetings)
+		//meeting_title
 		return
 	}
 	if delete == true {
 		fmt.Println("you are the sponsor of the meeting,yes you are sure to delete(cancel) the meeting")
 		//delete
 		res = append(meetings[0:pos], meetings[pos:]...)
-		saveMeetings(res)
+		datarw.SaveMeetings(res)
 		return
 	}
 	//res =meetings
@@ -143,6 +128,6 @@ func runExit() {
 		return
 	}
 	fmt.Println("successfully exit the meeting:", exit_title)
-	saveMeetings(meetings)
+	datarw.SaveMeetings(meetings)
 	return
 }

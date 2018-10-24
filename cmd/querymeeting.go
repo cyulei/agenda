@@ -18,7 +18,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/cyulei/Go-agenda/entity"
+	"github.com/cyulei/agenda/datarw"
+
+	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -62,10 +64,10 @@ func init() {
 func runQuery() {
 	//	load
 
-	var meetings = loadMeetings()
-	var usr = getCurrentUser()
+	var meetings = datarw.GetMeetings()
+	var usr = datarw.GetCurUser()
 
-	var res = make([]entity.Meeting, 1) //to display
+	var res = make([]entity.Meeting, 0) //to display
 
 	//parse the arguments
 	var title_limited = query_title != ""
@@ -73,10 +75,15 @@ func runQuery() {
 	var start_limited = false
 	var end_limited = false
 	var usr_limited = query_all
+	var usr_logged = usr != nil
 
 	var sdate = entity.Date{}
 	var edate = entity.Date{}
 
+	if usr_limited && !usr_logged { //想要查询当前登录的用户的会议但是又没有登录
+		println("you can not query for the current logged user,please login first! ")
+		return
+	}
 	if query_sDate != "" {
 		start_limited = true
 	} else if query_eDate != "" {
@@ -84,10 +91,11 @@ func runQuery() {
 	}
 	//time_limited = start_limited || end_limited
 
-	if len(query_sDate) != 16 || len(query_eDate) != 16 {
+	if len(query_sDate) != 16 && start_limited || len(query_eDate) != 16 && end_limited {
 		println("date format error,yyyy-mm-dd-hh:mm")
 		return
 	}
+	//func date
 	if start_limited {
 		var err, err1, err2, err3, err4 error
 		sdate.Year, err = strconv.Atoi((string)(query_sDate[0:4]))
@@ -98,6 +106,10 @@ func runQuery() {
 
 		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
 			println("date format error,yyyy-mm-dd-hh:mm")
+			return
+		}
+		if entity.IsValid(sdate) {
+			println("check your date number,pay attention to max day of the month and care for the leap year")
 			return
 		}
 	}
@@ -113,7 +125,12 @@ func runQuery() {
 			println("date format error,yyyy-mm-dd-hh:mm")
 			return
 		}
+		if entity.IsValid(edate) {
+			println("check your date number,pay attention to max day of the month and care for the leap year")
+			return
+		}
 	}
+
 	//end
 	//start querying
 
@@ -121,17 +138,18 @@ func runQuery() {
 		if title_limited && meeting.Title != query_title { //has limitation on title but not satisfied
 			continue
 		}
-		//no title limitation or satisfied
-		if start_limited && false { //has limitation on start date but not satisfied
+		//-----------------------not satisfied date compare-------------------------------------------------------------------
+		//no title limitation or has title limitation and already satisfied
+		if start_limited && entity.Compare(sdate, meeting.Startdate) > 0 { //has limitation on start date but not satisfied
 			continue
 		}
-		if end_limited && false {
+		if end_limited && entity.Compare(edate, meeting.Enddate) < 0 { //after the given edate ,which is not  supposed
 			continue
 		}
 		if usr_limited {
 
 			if usr.Name == meeting.Sponsor {
-
+				//we add this meeting to result
 			} else {
 				var f = false
 				for _, parts := range meeting.Participators {

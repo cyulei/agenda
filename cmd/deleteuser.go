@@ -17,6 +17,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/cyulei/agenda/datarw"
+
 	"github.com/spf13/cobra"
 )
 
@@ -32,19 +34,34 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("deleteuser called")
+		deleteuser()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(deleteuserCmd)
 
-	// Here you will define your flags and configuration settings.
+}
+func deleteuser() {
+	curUser, hasCurUser := datarw.GetCurUser()
+	if hasCurUser == true { //是否已登陆
+		fmt.Println("isn't login,please use command login")
+		return
+	}
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// deleteuserCmd.PersistentFlags().String("foo", "", "A help for foo")
+	users := datarw.GetUsers()
+	for index, user := range users {
+		if user.Name == curUser.Name {
+			users = append(users[:index], users[index+1:]...)
+			datarw.SaveUsers(users)
+			fmt.Println("User:", curUser.Name, " has been deleted")
 
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// deleteuserCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+			/*会议相关*/
+
+			return
+		}
+	}
+
+	fmt.Println("error: unexpected to execute")
+
 }
