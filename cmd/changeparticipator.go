@@ -15,10 +15,6 @@
 package cmd
 
 import (
-	"fmt"
-	"strings"
-
-	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -38,40 +34,42 @@ var changeparticipatorCmd = &cobra.Command{
 		If a meeting has no participators after this cmd, this meeting will be deleted.For exanple:\n
 		changeparticipator xxx(meeting-title) -d xxx|xxx|xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//get current user
-		var current_user entity.User
-		current_user = get_current_user()
-		change_participators := strings.Split(participator_name, "|")
-		if delete_flag {
-			finished := false
-			meetings := get_all_meetings()
-			for i, j := range meetings {
-				if j.Sponsor == current_user.Name && j.Title == meeting_title {
-					for m, k := range j.Participators {
-						if k.Name == participator_name {
-							j.Participators = append(j.Participators[:m], j.Participators[m+1:]...)
-							finished = true
-							if len(j.Participators) == 0 {
+		/*
+			//get current user
+			var current_user entity.User
+			current_user = get_current_user()
+			change_participators := strings.Split(participator_name, "|")
+			if delete_flag {
+				finished := false
+				meetings := get_all_meetings()
+				for i, j := range meetings {
+					if j.Sponsor == current_user.Name && j.Title == meeting_title {
+						for m, k := range j.Participators {
+							if k.Name == participator_name {
+								j.Participators = append(j.Participators[:m], j.Participators[m+1:]...)
+								finished = true
+								if len(j.Participators) == 0 {
 
+								}
+								break
 							}
+						}
+						if !finished {
 							break
+						} else {
+
 						}
 					}
-					if !finished {
-						break
-					} else {
-
-					}
 				}
+				fmt.Println("changeparticipator called")
 			}
-			fmt.Println("changeparticipator called")
-		}
+		*/
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(changeparticipatorCmd)
-	changeparticipatorCmd.Flags().StringVarP(&meeting_title, "title", "mt", "", "meeting title")
+	changeparticipatorCmd.Flags().StringVarP(&meeting_title, "title", "m", "", "meeting title")
 	changeparticipatorCmd.MarkFlagRequired("title")
 	changeparticipatorCmd.Flags().BoolVarP(&add_flag, "add", "a", true, "add participator")
 	changeparticipatorCmd.Flags().BoolVarP(&delete_flag, "delete", "d", false, "delete participator")

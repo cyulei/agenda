@@ -17,8 +17,6 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/cyulei/agenda/datarw"
-
 	"github.com/spf13/cobra"
 )
 
@@ -43,25 +41,25 @@ func init() {
 
 }
 func deleteuser() {
-	curUser, hasCurUser := datarw.GetCurUser()
-	if hasCurUser == true { //是否已登陆
-		fmt.Println("isn't login,please use command login")
-		return
-	}
+	/*
+			curUser, hasCurUser := datarw.GetCurUser()
+			if hasCurUser == true { //是否已登陆
+				fmt.Println("isn't login,please use command login")
+				return
+			}
 
-	users := datarw.GetUsers()
-	for index, user := range users {
-		if user.Name == curUser.Name {
-			users = append(users[:index], users[index+1:]...)
-			datarw.SaveUsers(users)
-			fmt.Println("User:", curUser.Name, " has been deleted")
+		users := datarw.GetUsers()
+		for index, user := range users {
 
-			/*会议相关*/
+				if user.Name == curUser.Name {
+					users = append(users[:index], users[index+1:]...)
+					datarw.SaveUsers(users)
+					fmt.Println("User:", curUser.Name, " has been deleted")
 
-			return
+				}
+
 		}
-	}
-
+	*/
 	fmt.Println("error: unexpected to execute")
 
 }

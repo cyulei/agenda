@@ -59,7 +59,7 @@ func init() {
 	registerCmd.Flags().StringVarP(&name, "name", "n", "", "user's name")
 	registerCmd.Flags().StringVarP(&registerPassword, "password", "p", "", "user's password")
 	registerCmd.Flags().StringVarP(&email, "email", "e", "", "user's email")
-	registerCmd.Flags().StringVarP(&phone, "phone", "e", "", "user's phone")
+	registerCmd.Flags().StringVarP(&phone, "phone", "t", "", "user's phone")
 }
 
 func register(name string, password string, email string, phone string) {

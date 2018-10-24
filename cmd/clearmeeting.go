@@ -15,10 +15,6 @@
 package cmd
 
 import (
-	"fmt"
-	"strconv"
-
-	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -31,28 +27,30 @@ var clearmeetingCmd = &cobra.Command{
 	Long: `Current user can clear all meetings that he sponsors, for example:\n
 		clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var delete_meetings []string
-		//get current user
-		var current_user entity.User
-		current_user = get_current_user()
-		//get all existed meetings
-		meetings := get_all_meetings()
-		//meetings after delete
-		var final_meetings []entity.Meeting
-		for i, j := range meetings {
-			if j.Sponsor == current_user.Name {
-				delete_meetings = append(delete_meetings, j.Title)
-			} else {
-				final_meetings = append(j)
+		/*
+			var delete_meetings []string
+			//get current user
+			var current_user entity.User
+			current_user = get_current_user()
+			//get all existed meetings
+			meetings := get_all_meetings()
+			//meetings after delete
+			var final_meetings []entity.Meeting
+			for i, j := range meetings {
+				if j.Sponsor == current_user.Name {
+					delete_meetings = append(delete_meetings, j.Title)
+				} else {
+					final_meetings = append(j)
+				}
 			}
-		}
 
-		if info_show {
-			for i, j := range delete_meetings {
-				fmt.Println("deletemeeting" + strconv.Itoa(i) + ": " + j)
+			if info_show {
+				for i, j := range delete_meetings {
+					fmt.Println("deletemeeting" + strconv.Itoa(i) + ": " + j)
+				}
 			}
-		}
-		fmt.Println("clearmeeting finished")
+			fmt.Println("clearmeeting finished")
+		*/
 	},
 }
 
