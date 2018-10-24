@@ -25,92 +25,100 @@ import (
 )
 
 //var cfgFile string
-var name, registerPassword, email, phone string
+var registerName, registerPassword string
 
 // registerCmd represents the register command
 var registerCmd = &cobra.Command{
 	Use:   "register",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "register a new User",
+	Long: `register:register a new User
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	For example:
+	register a new user,with name:User1,password:12345678
+	agenda register -n=User1 -p=12345678 
+	
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		register(name, registerPassword, email, phone)
+		register(registerName, registerPassword)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(registerCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// registerCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// registerCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
-	registerCmd.Flags().StringVarP(&name, "name", "n", "", "user's name")
+	registerCmd.Flags().StringVarP(&registerName, "name", "n", "", "user's name")
 	registerCmd.Flags().StringVarP(&registerPassword, "password", "p", "", "user's password")
-	registerCmd.Flags().StringVarP(&email, "email", "e", "", "user's email")
-	registerCmd.Flags().StringVarP(&phone, "phone", "t", "", "user's phone")
+
 }
 
-func register(name string, password string, email string, phone string) {
-	if isValidName(name) && isValidPassword(password) && isValidEmail(email) && isValidPhone(phone) {
-		users := datarw.GetUsers()
-		if !hasName(name, users) {
-			newuser := entity.User{Name: name, Password: password, Email: email, Phone: phone}
-			users = append(users, newuser)
-			datarw.SaveUsers(users)
-			fmt.Println("Registration complete")
+func register(name string, password string) {
+
+	if isValidName(name) && isValidPassword(password) {
+
+		var email, phone string
+		fmt.Println("please input your email:")
+		fmt.Scanln(&email)
+		fmt.Println("please input your phone:")
+		fmt.Scanln(&phone)
+
+		if isValidEmail(email) && isValidPhone(phone) {
+			users := datarw.GetUsers()
+			if !hasName(name, users) {
+				newuser := entity.User{Name: name, Password: password, Email: email, Phone: phone}
+				users = append(users, newuser)
+				datarw.SaveUsers(users)
+				fmt.Println("Registration complete")
+				return
+
+			}
+
 		}
 
 	}
+
+	fmt.Println("Register fail")
 
 }
 
 //Judge username exists
 func hasName(name string, users []entity.User) bool {
+
 	for _, user := range users {
 		if user.Name == name {
 			fmt.Println("The Username has been registered")
-			return false
+			return true
 		}
 	}
-	return true
+
+	return false
 }
 func isValidName(n string) bool {
 	b := []byte(n)
-
 	val, _ := regexp.Match(".+", b)
-
+	if !val {
+		fmt.Println("flag -n ,name is invaild")
+	}
 	return val
 }
 func isValidPassword(p string) bool {
 	b := []byte(p)
-
 	val, _ := regexp.Match(".+", b)
-	if len(p) < 9 {
+	if len(p) < 8 {
 		fmt.Println("The password must be longer than 8 digits")
 		val = false
 	}
-
+	if !val {
+		fmt.Println("flag -p ,password is invaild")
+	}
 	return val
 }
 func isValidEmail(e string) bool {
 	b := []byte(e)
-
 	val, _ := regexp.Match("\\w*@\\w*\\.w*", b)
 
 	if !val {
-		fmt.Println("The Email is invaild")
+		fmt.Println("email is invaild")
 	}
 	return val
 }
@@ -119,5 +127,8 @@ func isValidPhone(p string) bool {
 
 	val, _ := regexp.Match("[0-9]+", b)
 
+	if !val {
+		fmt.Println("phone is invaild")
+	}
 	return val
 }
