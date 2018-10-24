@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/cyulei/Go-agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -31,13 +32,16 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		//flag.Parse()
+		runExit()
 		fmt.Println("exitmeeting called")
 	},
 }
+var exit_title string
 
 func init() {
 	rootCmd.AddCommand(exitmeetingCmd)
-
+	exitmeetingCmd.Flags().StringVarP(&exit_title, "title", "t", "empty title", "input the title of meeting you want to exit")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -47,4 +51,98 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// exitmeetingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+func loadMeetings() []entity.Meeting {
+	res := make([]entity.Meeting, 2)
+	start := entity.Date{2008, 1, 1, 1, 1}
+	end := entity.Date{2018, 12, 23, 1, 1}
+
+	sponser := "liping"
+
+	participaters := []string{"liping", "daming", "xiaohong"}
+	exit_title := "hello world"
+	res[0] = entity.Meeting{sponser, participaters, start, end, exit_title}
+	res[1] = entity.Meeting{sponser, participaters, start, end, exit_title}
+	//res->
+	return res
+}
+
+func saveMeetings(meetings []entity.Meeting) {
+
+}
+func getCurrentUser() entity.User {
+	return entity.User{}
+}
+func setParticipators(mt *entity.Meeting, parts []string) {
+
+}
+func runExit() {
+	//load data
+	usr := getCurrentUser().Name
+	meetings := loadMeetings()
+	var res []entity.Meeting
+	//check title
+	if exit_title == "empty title" {
+		fmt.Println("please input the title ")
+		return
+	}
+
+	//find the meeting
+	delete := false
+	pos := -1
+	inmeeting := false
+	meetingExist := false
+
+	for i := 0; i < len(meetings); i++ {
+		mt := &meetings[i]
+		if mt.Title != exit_title {
+			continue
+		}
+		meetingExist = true
+
+		if mt.Sponsor == usr {
+			delete = true
+			pos = i
+			break
+		}
+
+		pts := mt.Participators
+		for j := 0; j < len(pts); j++ {
+			pt := pts[j]
+			if pt == usr { //usr is a participator of meeting mt,we need to remove usr from mt's participators
+				inmeeting = true
+				//remove
+				parts := make([]string, len(pts))
+
+				parts = append(parts, pts[0:j]...)
+				parts = append(parts, pts[j:]...)
+				//mt.participators = parts
+				mt.Participators = parts
+				//break
+				j = len(pts) + 100
+				i = len(meetings) + 100
+			}
+		}
+
+	}
+	if meetingExist == false {
+		fmt.Println("no such meeting,please check you title spelling")
+		//saveMeetings(meetings)
+		return
+	}
+	if delete == true {
+		fmt.Println("you are the sponsor of the meeting,yes you are sure to delete(cancel) the meeting")
+		//delete
+		res = append(meetings[0:pos], meetings[pos:]...)
+		saveMeetings(res)
+		return
+	}
+	//res =meetings
+	if inmeeting == false {
+		fmt.Println("you are not in meeting of title :", exit_title, " please check your spelling ?")
+		return
+	}
+	fmt.Println("successfully exit the meeting:", exit_title)
+	saveMeetings(meetings)
+	return
 }

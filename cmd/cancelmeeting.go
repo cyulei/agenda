@@ -16,7 +16,10 @@ package cmd
 
 import (
 	"fmt"
-	
+
+	"os"
+	"github.com/cyulei/Go-agenda/entity"
+
 	"github.com/spf13/cobra"
 )
 
@@ -31,13 +34,19 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		cancelRun()
 		fmt.Println("cancelmeeting called")
 	},
 }
+var cancel_title string
 
 func init() {
 	rootCmd.AddCommand(cancelmeetingCmd)
+
+	cancelmeetingCmd.Flags().StringVarP(&cancel_title, "title", "t", "", "yes,even stupid gay knows what it means")
+
 	
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
@@ -47,4 +56,49 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// cancelmeetingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+func cancelRun() {
+	//load
+	usr := getCurrentUser()
+	meetings := loadMeetings()
+	res := make([]entity.Meeting, 1) //for writing
+
+	//adjust the parameters
+	if cancel_title == "" {
+		fmt.Fprint(os.Stderr, "you must use a -t title to tell me which meeting you want to cancel")
+		return
+	}
+	//check login state
+	//if not log in exit
+
+	//cancel
+	var meetingExist = false
+	var authoritySatisified = false
+
+	for _, meeting := range meetings {
+		if meeting.Title != cancel_title {
+			res = append(res, meeting)
+			continue
+		}
+
+		meetingExist = true
+		if usr.Name != meeting.Sponsor {
+			res = append(res, meeting)
+			continue
+		}
+
+		authoritySatisified = true
+		//all satisfied
+		break
+	}
+	if !meetingExist {
+		println("no such meeting :", cancel_title)
+		return
+	}
+	if !authoritySatisified {
+		println("there is a meeting called :", cancel_title, "but you are not the sponsor of it,please try to relog in ?")
+		return
+	}
+	saveMeetings(res)
+	println("successfully cancel the meeting :", cancel_title)
 }
