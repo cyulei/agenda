@@ -63,7 +63,7 @@ func init() {
 }
 func runQuery() {
 	//	load
-
+	//datarw.SaveMeetings
 	var meetings = datarw.GetMeetings()
 	var usr = datarw.GetCurUser()
 
