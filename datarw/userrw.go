@@ -39,38 +39,43 @@ func SaveUsers(usersToSave []entity.User) {
 
 }
 
-// GetCurUser get a entity.User from a file
-func GetCurUser() (entity.User, bool) {
+// GetCurUser get a *entity.User from a file
+func GetCurUser() *entity.User {
 	filePath := "datarw/CurUser.json"
+
 	var user entity.User
 
-	var hasCurUser bool
-	if hasCurUser = existFile(filePath); hasCurUser {
-
+	if existFile(filePath) {
+		//读取Json串
 		josnStr, err := ioutil.ReadFile(filePath)
 		checkError(err)
-
+		//解析Json串
 		err = json.Unmarshal(josnStr, &user)
 		checkError(err)
+
+		return &user
 	}
 
-	return user, hasCurUser
+	return nil
 
 }
 
 // SaveCurUser save a entity.User to a file
-func SaveCurUser(userToSave entity.User) {
+func SaveCurUser(userToSave *entity.User) {
 	filePath := "datarw/CurUser.json"
 	//清空原文件
 	os.Truncate(filePath, 0)
 
-	//转为json串
-	josnStr, err := json.Marshal(userToSave)
-	checkError(err)
-	err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
-	checkError(err)
+	if userToSave != nil {
+		//转为json串
+		josnStr, err := json.Marshal(userToSave)
+		checkError(err)
+		err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
+		checkError(err)
+	}
 
 }
+
 func checkError(err error) {
 	if err != nil {
 		fmt.Println("error:", err)
