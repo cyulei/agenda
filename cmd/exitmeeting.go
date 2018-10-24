@@ -17,11 +17,7 @@ package cmd
 import (
 	"fmt"
 
-<<<<<<< HEAD
-=======
 	"github.com/cyulei/agenda/datarw"
-
->>>>>>> d823cadd36789c7ecde564f0e4d65da972ab2ebc
 	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
