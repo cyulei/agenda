@@ -18,15 +18,16 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/cyulei/agenda/datarw"
 	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
 
 var (
-	meeting_title     string
-	add_flag          bool
-	delete_flag       bool
-	participator_name string
+	change_meeting_title string
+	add_flag             bool
+	delete_flag          bool
+	participator_name    string
 )
 
 // changeparticipatorCmd represents the changeparticipator command
@@ -35,44 +36,94 @@ var changeparticipatorCmd = &cobra.Command{
 	Short: "Current user can change participators of a meeting",
 	Long: `Current user can change participators of a meeting he sponsors. The adding process\n
 		need date checks, that is to say participators need to have free time for this meeting.\n
-		If a meeting has no participators after this cmd, this meeting will be deleted.For exanple:\n
-		changeparticipator xxx(meeting-title) -d xxx|xxx|xxx`,
+		If a meeting has no participators after this cmd, this meeting will be deleted. For exanple:\n
+		changeparticipator xxx(meeting-title) -d/-a xxx|xxx|xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//get current user
-		var current_user entity.User
-		current_user = get_current_user()
-		change_participators := strings.Split(participator_name, "|")
-		if delete_flag {
-			finished := false
-			meetings := get_all_meetings()
-			for i, j := range meetings {
-				if j.Sponsor == current_user.Name && j.Title == meeting_title {
-					for m, k := range j.Participators {
-						if k.Name == participator_name {
-							j.Participators = append(j.Participators[:m], j.Participators[m+1:]...)
-							finished = true
-							if len(j.Participators) == 0 {
+		current_user := datarw.GetCurUser() //current user
+		if current_user == nil {
+			fmt.Println("Please log first")
+			return
+		}
 
-							}
-							break
+		change_participators := strings.Split(participator_name, "-") //change name list
+		meetings := datarw.GetMeetings()                              //all meetings
+		meeting_exist := false
+		var final_participators []string
+		if delete_flag {
+			//delete participators from a meeting
+
+			var delete_participators []string
+			for i, j := range meetings {
+				if j.Sponsor == current_user.Name && j.Title == change_meeting_title {
+					meeting_exist = true
+
+					for _, k := range j.Participators {
+						if isParticipatorinList(k, change_participators) {
+							delete_participators = append(delete_participators, k)
+						} else {
+							final_participators = append(final_participators, k)
 						}
 					}
-					if !finished {
-						break
-					} else {
 
+					if len(final_participators) == 0 {
+						meetings = append(meetings[:i], meetings[i+1:]...)
+					} else {
+						j.Participators = final_participators
 					}
+					datarw.SaveMeetings(meetings)
+					break
 				}
 			}
-			fmt.Println("changeparticipator called")
+			if !meeting_exist {
+				fmt.Println("No such meeting, check meeting title")
+			} else if len(delete_participators) != len(change_participators) {
+				fmt.Println("Some users don't exist in this meeting. Already delete: ")
+				for _, j := range delete_participators {
+					fmt.Println(j)
+				}
+			}
+		} else {
+			//add participators to a meeting
+			var valid_participators []string
+			var all_users []entity.User
+			all_users = datarw.GetUsers()
+			for _, j := range change_participators {
+				if !isParticipatorExist(j, all_users) {
+					fmt.Println(j + " is not a valid user")
+				} else {
+					valid_participators = append(valid_participators, j)
+				}
+			}
+			if len(valid_participators) != 0 {
+				for i, j := range meetings {
+					if j.Sponsor == current_user.Name && j.Title == change_meeting_title {
+						final_participators = j.Participators
+						meeting_exist = true
+						for _, k := range valid_participators {
+							if isParticipatorExistinMeeting(k, j) {
+								fmt.Println(k + " is already in this meeting")
+							} else {
+								fmt.Println("hh3")
+								meetings[i].Participators = append(meetings[i].Participators, k)
+							}
+						}
+						datarw.SaveMeetings(meetings)
+						break
+					}
+				}
+				if !meeting_exist {
+					fmt.Println("No such meeting, check meeting title")
+				}
+			}
 		}
+		fmt.Println("changeparticipator finished")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(changeparticipatorCmd)
-	changeparticipatorCmd.Flags().StringVarP(&meeting_title, "title", "mt", "", "meeting title")
-	changeparticipatorCmd.MarkFlagRequired("title")
+	changeparticipatorCmd.Flags().StringVarP(&change_meeting_title, "chptitle", "t", "", "meeting title")
+	changeparticipatorCmd.MarkFlagRequired("chptitle")
 	changeparticipatorCmd.Flags().BoolVarP(&add_flag, "add", "a", true, "add participator")
 	changeparticipatorCmd.Flags().BoolVarP(&delete_flag, "delete", "d", false, "delete participator")
 	changeparticipatorCmd.Flags().StringVarP(&participator_name, "name", "n", "", "participator's name")
@@ -86,4 +137,46 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// changeparticipatorCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func isParticipatorinList(name string, participators []string) bool {
+	for _, j := range participators {
+		if name == j {
+			return true
+		}
+	}
+	return false
+}
+
+func isParticipatorExist(name string, participators []entity.User) bool {
+	for _, j := range participators {
+		if name == j.Name {
+			return true
+		}
+	}
+	return false
+}
+
+func isParticipatorExistinMeeting(name string, meeting entity.Meeting) bool {
+	for _, j := range meeting.Participators {
+		if name == j {
+			return true
+		}
+	}
+	return false
+}
+
+func isParticipatorAvailable(name string, all_meetings []entity.Meeting, current_meeting entity.Meeting) bool {
+	start_date := current_meeting.Startdate
+	end_date := current_meeting.Enddate
+	for _, j := range all_meetings {
+		if isParticipatorExistinMeeting(name, j) {
+			if entity.Compare(j.Startdate, end_date) >= 0 || entity.Compare(start_date, j.Enddate) >= 0 {
+				continue
+			} else {
+				return false
+			}
+		}
+	}
+	return true
 }
