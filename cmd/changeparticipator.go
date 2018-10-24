@@ -16,28 +16,67 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
+	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
+)
+
+var (
+	meeting_title     string
+	add_flag          bool
+	delete_flag       bool
+	participator_name string
 )
 
 // changeparticipatorCmd represents the changeparticipator command
 var changeparticipatorCmd = &cobra.Command{
 	Use:   "changeparticipator",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Current user can change participators of a meeting",
+	Long: `Current user can change participators of a meeting he sponsors. The adding process\n
+		need date checks, that is to say participators need to have free time for this meeting.\n
+		If a meeting has no participators after this cmd, this meeting will be deleted.For exanple:\n
+		changeparticipator xxx(meeting-title) -d xxx|xxx|xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("changeparticipator called")
+		//get current user
+		var current_user entity.User
+		current_user = get_current_user()
+		change_participators := strings.Split(participator_name, "|")
+		if delete_flag {
+			finished := false
+			meetings := get_all_meetings()
+			for i, j := range meetings {
+				if j.Sponsor == current_user.Name && j.Title == meeting_title {
+					for m, k := range j.Participators {
+						if k.Name == participator_name {
+							j.Participators = append(j.Participators[:m], j.Participators[m+1:]...)
+							finished = true
+							if len(j.Participators) == 0 {
+
+							}
+							break
+						}
+					}
+					if !finished {
+						break
+					} else {
+
+					}
+				}
+			}
+			fmt.Println("changeparticipator called")
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(changeparticipatorCmd)
-
+	changeparticipatorCmd.Flags().StringVarP(&meeting_title, "title", "mt", "", "meeting title")
+	changeparticipatorCmd.MarkFlagRequired("title")
+	changeparticipatorCmd.Flags().BoolVarP(&add_flag, "add", "a", true, "add participator")
+	changeparticipatorCmd.Flags().BoolVarP(&delete_flag, "delete", "d", false, "delete participator")
+	changeparticipatorCmd.Flags().StringVarP(&participator_name, "name", "n", "", "participator's name")
+	changeparticipatorCmd.MarkFlagRequired("name")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
