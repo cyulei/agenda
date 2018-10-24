@@ -96,7 +96,6 @@ func existFile(path string) bool {
 func TestUser() {
 	users := GetUsers()
 	user1 := entity.User{"456", "456", "456", "4588"}
-	user2 := entity.User{"456", "456", "456", "4588"}
-	users = append(users, user1, user2)
+	users = append(users, user1)
 	SaveUsers(users)
 }
