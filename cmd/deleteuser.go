@@ -83,6 +83,7 @@ func cancleAllmeeting(user entity.User) {
 			newMeetings = append(newMeetings, meeting)
 		}
 	}
+
 	datarw.SaveMeetings(newMeetings)
 }
 
@@ -90,10 +91,11 @@ func cancleAllmeeting(user entity.User) {
 func exitAllmeeting(user entity.User) {
 	meetings := datarw.GetMeetings()
 
-	for _, meeting := range meetings { //遍历会议
+	for k, meeting := range meetings { //遍历会议
 		for i, participator := range meeting.Participators { //遍历一个会议的成员
+
 			if participator == user.Name {
-				meeting.Participators = append(meeting.Participators[:i], meeting.Participators[i+1:]...)
+				meetings[k].Participators = append(meetings[k].Participators[:i], meetings[k].Participators[i+1:]...)
 
 				break //!!!
 			}
