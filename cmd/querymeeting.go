@@ -175,7 +175,7 @@ func DisplayMeeting(mt []entity.Meeting) {
 	standardNameLength := 8
 	//standardTimeLength := 16
 	println("-----------------Display Meeting---------------------------")
-	println("Title\t\t\tSponsor\t\t\tStart Time\t\tEnd Time\t\tParticipators")
+	println("Title\t\tSponsor\t\tStart Time\t\tEnd Time\t\tParticipators")
 	for _, meeting := range mt {
 		print(meeting.Title)
 		for j := 4; j <= standardMeetingLength; j += 4 {
@@ -183,6 +183,7 @@ func DisplayMeeting(mt []entity.Meeting) {
 				for k := j - 4; k < standardMeetingLength; k += 4 {
 					print("\t")
 				}
+				break
 			}
 		}
 		//print("\t\t")
@@ -192,6 +193,7 @@ func DisplayMeeting(mt []entity.Meeting) {
 				for k := j - 4; k < standardNameLength; k += 4 {
 					print("\t")
 				}
+				break
 			}
 		}
 		//print("\n")
