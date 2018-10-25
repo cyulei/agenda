@@ -38,7 +38,7 @@ var createmeetingCmd = &cobra.Command{
 	Short: "Create a meeting",
 	Long: `Current user can create a meeting. You should provide meeting title, start date and end date of this meeting\n
 	and all participators. For example:\n
-	createmeeting -t=new_meeting -s=2007|8|3|13|42 -d=2007|8|3|15|42 -p=xxx|xxx|xxx`,
+	createmeeting -t=new_meeting -s=2007-8-3-13-42 -d=2007-8-3-15-42 -p=xxx-xxx-xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
 		current_user := datarw.GetCurUser()
 		if current_user == nil {
@@ -53,7 +53,7 @@ var createmeetingCmd = &cobra.Command{
 		end_date_string := strings.Split(create_end_date, "-")
 		var s_date, e_date entity.Date
 		if len(start_date_string) != 5 || len(end_date_string) != 5 {
-			fmt.Println("Wrong date format. Should be Year|Month|Day|Hour|Minute")
+			fmt.Println("Wrong date format. Should be Year-Month-Day-Hour-Minute")
 			return
 		} else {
 			s_date1, flag1 := convert(start_date_string)
@@ -61,9 +61,16 @@ var createmeetingCmd = &cobra.Command{
 			s_date = s_date1
 			e_date = e_date1
 			if !flag1 || !flag2 {
-				fmt.Println("Wrong date format. Should be Year|Month|Day|Hour|Minute")
+				fmt.Println("Wrong date format. Should be Year-Month-Day-Hour-Minute")
 				return
 			}
+		}
+		var temp_meeting entity.Meeting
+		temp_meeting.Startdate = s_date
+		temp_meeting.Enddate = e_date
+		if !isParticipatorAvailable(current_user.Name, meetings, temp_meeting) {
+			fmt.Println("Sponsor is not free")
+			return
 		}
 
 		valid_participators, ok := check_participators(change_participators, users, meetings, s_date, e_date)
