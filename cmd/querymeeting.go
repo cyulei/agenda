@@ -76,7 +76,7 @@ func runQuery() {
 	//var time_limited = false
 	var start_limited = false
 	var end_limited = false
-	var usr_limited = query_all
+	var usr_limited = !query_all
 	var usr_logged = usr != nil
 
 	var sdate = entity.Date{}
