@@ -16,9 +16,8 @@ package cmd
 
 import (
 	"fmt"
-
-	"github.com/cyulei/agenda/datarw"
-	"github.com/modood/table" //以表格形式输出
+	"github.com/cyulei/agenda/datarw" //"github.com/modood/table" //以表格形式输出
+	"github.com/modood/table"
 	"github.com/spf13/cobra"
 )
 

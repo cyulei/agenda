@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/cyulei/agenda/entity"
 )
@@ -29,9 +30,8 @@ func GetUsers() []entity.User {
 func SaveUsers(usersToSave []entity.User) {
 	filePath := "datarw/Users.json"
 	//清空原文件
-	if existFile(filePath) {
-		os.Truncate(filePath, 0)
-	}
+	os.Truncate(filePath, 0)
+
 	//转为json串
 	josnStr, err := json.Marshal(usersToSave)
 	checkError(err)
@@ -50,6 +50,12 @@ func GetCurUser() *entity.User {
 		//读取Json串
 		josnStr, err := ioutil.ReadFile(filePath)
 		checkError(err)
+		//检查是否是空文件
+		str := strings.Replace(string(josnStr), "\n", "", 1)
+		if str == "" {
+			//fmt.Println("Empty")
+			return nil
+		}
 		//解析Json串
 		err = json.Unmarshal(josnStr, &user)
 		checkError(err)
@@ -65,9 +71,7 @@ func GetCurUser() *entity.User {
 func SaveCurUser(userToSave *entity.User) {
 	filePath := "datarw/CurUser.json"
 	//清空原文件
-	if existFile(filePath) {
-		os.Truncate(filePath, 0)
-	}
+	os.Truncate(filePath, 0)
 
 	if userToSave != nil {
 		//转为json串
@@ -75,6 +79,8 @@ func SaveCurUser(userToSave *entity.User) {
 		checkError(err)
 		err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
 		checkError(err)
+		//开放文件权限
+		os.Chmod(filePath, 0777)
 	}
 
 }
