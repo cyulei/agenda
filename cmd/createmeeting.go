@@ -78,6 +78,15 @@ var createmeetingCmd = &cobra.Command{
 			datarw.SaveMeetings(meetings)
 			fmt.Println("createmeeting finished")
 		} else {
+			if !check_title(create_meeting_title, meetings) {
+				fmt.Println("Meeting exists, change meeting title")
+			}
+			if !check_date(s_date, e_date) {
+				fmt.Println("Invalid start/end date, please check")
+			}
+			if !ok {
+				fmt.Println("No valid participators (busy or not exists)")
+			}
 			fmt.Println("createmeeting failed")
 		}
 

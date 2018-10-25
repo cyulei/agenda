@@ -114,6 +114,7 @@ var changeparticipatorCmd = &cobra.Command{
 				if !meeting_exist {
 					fmt.Println("No such meeting, check meeting title")
 				}
+				fmt.Println("changeparticipator called")
 			}
 		}
 		fmt.Println("changeparticipator finished")

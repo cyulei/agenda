@@ -58,7 +58,7 @@ func runExit() {
 	}
 	usr := curUsr.Name
 	meetings := datarw.GetMeetings()
-	var res []entity.Meeting
+	var res = make([]entity.Meeting, 0)
 	//check title
 	if exit_title == "empty title" {
 		fmt.Println("please input the title ")
@@ -112,7 +112,7 @@ func runExit() {
 	if delete == true {
 		fmt.Println("you are the sponsor of the meeting,yes you are sure to delete(cancel) the meeting")
 		//delete
-		res = append(meetings[0:pos], meetings[pos:]...)
+		res = append(meetings[0:pos], meetings[pos+1:]...)
 		datarw.SaveMeetings(res)
 		return
 	}

@@ -56,7 +56,7 @@ func cancelRun() {
 	//load
 	usr := datarw.GetCurUser()
 	meetings := datarw.GetMeetings()
-	res := make([]entity.Meeting, 1) //for writing
+	res := make([]entity.Meeting, 0) //for writing
 
 	//adjust the parameters
 	if cancel_title == "" {

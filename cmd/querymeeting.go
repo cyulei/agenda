@@ -175,29 +175,35 @@ func runQuery() {
 func DisplayMeeting(mt []entity.Meeting) {
 
 	standardMeetingLength := 12
-	standardNameLength := 8
+	standardNameLength := 12
+
 	//standardTimeLength := 16
 	println("-----------------Display Meeting---------------------------")
-	println("Title\t\tSponsor\t\tStart Time\t\tEnd Time\t\tParticipators")
+	println("Title       Sponsor     Start Time\t\tEnd Time\t\tParticipators")
 	for _, meeting := range mt {
+
+		typed := 0
 		print(meeting.Title)
-		for j := 4; j <= standardMeetingLength; j += 4 {
-			if len(meeting.Title) < j {
-				for k := j - 4; k < standardMeetingLength; k += 4 {
-					print("\t")
-				}
+		typed += len(meeting.Title)
+
+		for {
+			if typed >= standardMeetingLength {
 				break
 			}
+			typed++
+			print(" ")
+
 		}
 		//print("\t\t")
+		last := typed
 		print(meeting.Sponsor)
-		for j := 4; j <= standardNameLength; j += 4 {
-			if len(meeting.Sponsor) < j {
-				for k := j - 4; k < standardNameLength; k += 4 {
-					print("\t")
-				}
+		typed += len(meeting.Sponsor)
+		for {
+			if typed >= last+standardNameLength {
 				break
 			}
+			typed++
+			print(" ")
 		}
 		//print("\n")
 		sd := meeting.Startdate
