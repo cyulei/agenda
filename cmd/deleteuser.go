@@ -17,10 +17,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/cyulei/agenda/entity"
-
 	"github.com/cyulei/agenda/datarw"
-
+	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
 
@@ -60,18 +58,13 @@ func deleteuser() {
 			datarw.SaveCurUser(nil) //登出
 			fmt.Println("User:", curUser.Name, " has been deleted")
 
-			if user.Name == curUser.Name {
-				users = append(users[:index], users[index+1:]...)
-				datarw.SaveUsers(users)
-				fmt.Println("User:", curUser.Name, " has been deleted")
+			/*会议相关*/
 
-				cancleAllmeeting(*curUser) //当前用户取消所有其创建的会议
-				exitAllmeeting(*curUser)   //当前用户退出所有会议
+			cancleAllmeeting(*curUser) //当前用户取消所有其创建的会议
+			exitAllmeeting(*curUser)   //当前用户退出所有会议
 
-				return
-			}
+			return
 		}
-
 	}
 
 	fmt.Println("error: unexpected to execute")
@@ -88,6 +81,7 @@ func cancleAllmeeting(user entity.User) {
 			newMeetings = append(newMeetings, meeting)
 		}
 	}
+
 	datarw.SaveMeetings(newMeetings)
 }
 
@@ -95,10 +89,11 @@ func cancleAllmeeting(user entity.User) {
 func exitAllmeeting(user entity.User) {
 	meetings := datarw.GetMeetings()
 
-	for _, meeting := range meetings { //遍历会议
+	for k, meeting := range meetings { //遍历会议
 		for i, participator := range meeting.Participators { //遍历一个会议的成员
+
 			if participator == user.Name {
-				meeting.Participators = append(meeting.Participators[:i], meeting.Participators[i+1:]...)
+				meetings[k].Participators = append(meetings[k].Participators[:i], meetings[k].Participators[i+1:]...)
 
 				break //!!!
 			}

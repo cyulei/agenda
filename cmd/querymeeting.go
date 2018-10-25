@@ -26,13 +26,16 @@ import (
 // querymeetingCmd represents the querymeeting command
 var querymeetingCmd = &cobra.Command{
 	Use:   "querymeeting",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "使用开始日期，结束日期，标题，是否局限于当前用户四个选项，你可以选择使用四个选项任意的组合，或者不使用任何选项，那将筛选出所有的会议",
+	Long: `query meetings limited by start date or end date or title or current user,any of the four limitation can be added or not added.datarw
+	For example:
+	agenda querymeeting
+	agenda querymeeting -t title
+	agenda querymeeting -s 2018-10-25-14:20
+	agenda querymeeting -e 2018-10-25-14:20
+	agenda querymeeting -a
+	you can combine any of above to start your query
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("querymeeting called")
 		runQuery()
@@ -73,7 +76,7 @@ func runQuery() {
 	//var time_limited = false
 	var start_limited = false
 	var end_limited = false
-	var usr_limited = query_all
+	var usr_limited = !query_all
 	var usr_logged = usr != nil
 
 	var sdate = entity.Date{}
@@ -172,27 +175,35 @@ func runQuery() {
 func DisplayMeeting(mt []entity.Meeting) {
 
 	standardMeetingLength := 12
-	standardNameLength := 8
+	standardNameLength := 12
+
 	//standardTimeLength := 16
 	println("-----------------Display Meeting---------------------------")
-	println("Title\t\t\tSponsor\t\t\tStart Time\t\tEnd Time\t\tParticipators")
+	println("Title       Sponsor     Start Time\t\tEnd Time\t\tParticipators")
 	for _, meeting := range mt {
+
+		typed := 0
 		print(meeting.Title)
-		for j := 4; j <= standardMeetingLength; j += 4 {
-			if len(meeting.Title) < j {
-				for k := j - 4; k < standardMeetingLength; k += 4 {
-					print("\t")
-				}
+		typed += len(meeting.Title)
+
+		for {
+			if typed >= standardMeetingLength {
+				break
 			}
+			typed++
+			print(" ")
+
 		}
 		//print("\t\t")
+		last := typed
 		print(meeting.Sponsor)
-		for j := 4; j <= standardNameLength; j += 4 {
-			if len(meeting.Sponsor) < j {
-				for k := j - 4; k < standardNameLength; k += 4 {
-					print("\t")
-				}
+		typed += len(meeting.Sponsor)
+		for {
+			if typed >= last+standardNameLength {
+				break
 			}
+			typed++
+			print(" ")
 		}
 		//print("\n")
 		sd := meeting.Startdate

@@ -25,13 +25,8 @@ import (
 // exitmeetingCmd represents the exitmeeting command
 var exitmeetingCmd = &cobra.Command{
 	Use:   "exitmeeting",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "exit meeting , you must login first , if you are the sponser of the meeting,it'll be canceled without assertain",
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		//flag.Parse()
 		runExit()
@@ -63,7 +58,7 @@ func runExit() {
 	}
 	usr := curUsr.Name
 	meetings := datarw.GetMeetings()
-	var res []entity.Meeting
+	var res = make([]entity.Meeting, 0)
 	//check title
 	if exit_title == "empty title" {
 		fmt.Println("please input the title ")
@@ -117,7 +112,7 @@ func runExit() {
 	if delete == true {
 		fmt.Println("you are the sponsor of the meeting,yes you are sure to delete(cancel) the meeting")
 		//delete
-		res = append(meetings[0:pos], meetings[pos:]...)
+		res = append(meetings[0:pos], meetings[pos+1:]...)
 		datarw.SaveMeetings(res)
 		return
 	}

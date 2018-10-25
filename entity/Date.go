@@ -38,6 +38,6 @@ func IsValid(d Date) bool {
 }
 func Compare(first Date, second Date) int {
 	return first.Year*366*24*60 + first.Month*30*24*60 + first.Day*24*60 + first.Hour*60 + first.Minute -
-		(second.Year*366*24*60 + second.Month*30*24*60 + second.Day*24*60 + second.Hour*60 + first.Minute)
+		(second.Year*366*24*60 + second.Month*30*24*60 + second.Day*24*60 + second.Hour*60 + second.Minute)
 
 }
