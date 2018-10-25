@@ -30,6 +30,11 @@ var loginCmd = &cobra.Command{
 		username, _ := cmd.Flags().GetString("username")
 		password, _ := cmd.Flags().GetString("password")
 		//fmt.Println(username, password)
+		curUser := datarw.GetCurUser()
+		if curUser != nil {
+			fmt.Println("It's logged in!Please log out!")
+			return
+		}
 		//检测是否已经存在用户
 		users := datarw.GetUsers()
 		for i := 0; i < len(users); i++ {
@@ -37,13 +42,14 @@ var loginCmd = &cobra.Command{
 				//得到用户密码是否正确
 				if users[i].Password == password {
 					//标示用户已经登陆
-					fmt.Println("login success!")
+					fmt.Println("Login success!")
+					datarw.SaveCurUser(&users[i])
 					return
 				}
-				fmt.Println("password erorr")
+				fmt.Println("Password erorr")
 			}
 		}
-		fmt.Println("username don't exist")
+		fmt.Println("Username don't exist")
 	},
 }
 
