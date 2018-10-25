@@ -103,8 +103,11 @@ var changeparticipatorCmd = &cobra.Command{
 							if isParticipatorExistinMeeting(k, j) {
 								fmt.Println(k + " is already in this meeting")
 							} else {
-								fmt.Println("hh3")
-								meetings[i].Participators = append(meetings[i].Participators, k)
+								if isParticipatorAvailable(k, meetings, j) {
+									meetings[i].Participators = append(meetings[i].Participators, k)
+								} else {
+									fmt.Println(k + " is not free")
+								}
 							}
 						}
 						datarw.SaveMeetings(meetings)
@@ -114,7 +117,6 @@ var changeparticipatorCmd = &cobra.Command{
 				if !meeting_exist {
 					fmt.Println("No such meeting, check meeting title")
 				}
-				fmt.Println("changeparticipator called")
 			}
 		}
 		fmt.Println("changeparticipator finished")
@@ -159,6 +161,9 @@ func isParticipatorExist(name string, participators []entity.User) bool {
 }
 
 func isParticipatorExistinMeeting(name string, meeting entity.Meeting) bool {
+	if name == meeting.Sponsor {
+		return true
+	}
 	for _, j := range meeting.Participators {
 		if name == j {
 			return true

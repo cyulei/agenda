@@ -65,6 +65,13 @@ var createmeetingCmd = &cobra.Command{
 				return
 			}
 		}
+		var temp_meeting entity.Meeting
+		temp_meeting.Startdate = s_date
+		temp_meeting.Enddate = e_date
+		if !isParticipatorAvailable(current_user.Name, meetings, temp_meeting) {
+			fmt.Println("Sponsor is not free")
+			return
+		}
 
 		valid_participators, ok := check_participators(change_participators, users, meetings, s_date, e_date)
 		if check_title(create_meeting_title, meetings) && check_date(s_date, e_date) && ok {

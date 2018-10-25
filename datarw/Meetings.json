@@ -1,2 +1,1 @@
-[{"Sponsor":"hh","Participators":["hh1"],"Startdate":{"Year":2018,"Month":10,"Day":25,"Hour":1,"Minute":39},"Enddate":{"Year":2018,"Month":10,"Day":26,"Hour":1,"Minute":39},"Title":"hello"},{"Sponsor":"hh","Participators":["hh1"],"Startdate":{"Year":2008,"Month":10,"Day":10,"Hour":10,"Minute":10},"Enddate":{"Year":2009,"Month":10,"Day":10,"Hour":10,"Minute":10},"Title":"meeting2"}]
-
+[{"Sponsor":"hh1","Participators":["hh3"],"Startdate":{"Year":2018,"Month":1,"Day":1,"Hour":1,"Minute":1},"Enddate":{"Year":2018,"Month":1,"Day":1,"Hour":2,"Minute":1},"Title":"m2"},{"Sponsor":"hh2","Participators":["hh4"],"Startdate":{"Year":2018,"Month":1,"Day":1,"Hour":1,"Minute":1},"Enddate":{"Year":2018,"Month":1,"Day":1,"Hour":2,"Minute":1},"Title":"m1"}]
