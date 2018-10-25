@@ -26,13 +26,16 @@ import (
 // querymeetingCmd represents the querymeeting command
 var querymeetingCmd = &cobra.Command{
 	Use:   "querymeeting",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "使用开始日期，结束日期，标题，是否局限于当前用户四个选项，你可以选择使用四个选项任意的组合，或者不使用任何选项，那将筛选出所有的会议",
+	Long: `query meetings limited by start date or end date or title or current user,any of the four limitation can be added or not added.datarw
+	For example:
+	agenda querymeeting
+	agenda querymeeting -t title
+	agenda querymeeting -s 2018-10-25-14:20
+	agenda querymeeting -e 2018-10-25-14:20
+	agenda querymeeting -a
+	you can combine any of above to start your query
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("querymeeting called")
 		runQuery()
