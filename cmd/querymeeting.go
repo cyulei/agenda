@@ -107,12 +107,13 @@ func runQuery() {
 			println("date format error,yyyy-mm-dd-hh:mm")
 			return
 		}
-		if entity.IsValid(sdate) {
+		if !entity.IsValid(sdate) {
+			println(sdate.Year, sdate.Month, sdate.Day, sdate.Hour, sdate.Minute)
 			println("check your date number,pay attention to max day of the month and care for the leap year")
 			return
 		}
 	}
-	if start_limited {
+	if end_limited {
 		var err, err1, err2, err3, err4 error
 		edate.Year, err = strconv.Atoi((string)(query_eDate[0:4]))
 		edate.Month, err1 = strconv.Atoi(query_eDate[5:7])
@@ -170,11 +171,11 @@ func runQuery() {
 
 func DisplayMeeting(mt []entity.Meeting) {
 
-	standardMeetingLength := 5 + 7
-	standardNameLength := 7 + 5
+	standardMeetingLength := 12
+	standardNameLength := 8
 	//standardTimeLength := 16
 	println("-----------------Display Meeting---------------------------")
-	println("Title\t\tSponsor\t\tStart Time\t\tEnd Time\t\tParticipators")
+	println("Title\t\t\tSponsor\t\t\tStart Time\t\tEnd Time\t\tParticipators")
 	for _, meeting := range mt {
 		print(meeting.Title)
 		for j := 4; j <= standardMeetingLength; j += 4 {
@@ -184,7 +185,7 @@ func DisplayMeeting(mt []entity.Meeting) {
 				}
 			}
 		}
-		//print("\n")
+		//print("\t\t")
 		print(meeting.Sponsor)
 		for j := 4; j <= standardNameLength; j += 4 {
 			if len(meeting.Sponsor) < j {
@@ -205,7 +206,7 @@ func DisplayMeeting(mt []entity.Meeting) {
 		info := fmt.Sprintf("%04d-%02d-%02d-%02d:%02d", year, month, day, hour, minute)
 		//fmt.sprintf(info, "%04d-%02d-%02d-%02d:%02d", year, month, day, hour, minute)
 		print(info)
-
+		print("\t")
 		year = ed.Year
 		month = ed.Month
 		day = ed.Day
@@ -214,7 +215,7 @@ func DisplayMeeting(mt []entity.Meeting) {
 
 		info = fmt.Sprintf("%04d-%02d-%02d-%02d:%02d", year, month, day, hour, minute)
 		print(info)
-
+		print("\t")
 		for _, p := range meeting.Participators {
 			print(p)
 			for j := 4; j <= standardNameLength; j += 4 {

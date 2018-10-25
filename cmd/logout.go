@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/cyulei/agenda/datarw"
 	"github.com/spf13/cobra"
 )
 
@@ -26,9 +27,17 @@ var logoutCmd = &cobra.Command{
 	Short: "log out",
 	Long:  `Input command mode like : logout`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("logout called")
+
 		//确定当前是登陆状态
+		curUser := datarw.GetCurUser()
+		if curUser == nil {
+			fmt.Println("Please log in!")
+			return
+		}
+		datarw.SaveCurUser(nil)
+		fmt.Println("Logout success!")
 		//登出
+
 	},
 }
 

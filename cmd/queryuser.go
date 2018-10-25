@@ -18,7 +18,7 @@ import (
 	"fmt"
 
 	"github.com/cyulei/agenda/datarw"
-	"github.com/modood/table" //以表格形式输出
+	//"github.com/modood/table" //以表格形式输出
 	"github.com/spf13/cobra"
 )
 
@@ -58,7 +58,7 @@ func queryuser() {
 
 	if queryuserName == "" { //查询所有用户（因为已登录，所以不可能没有用户）
 
-		fmt.Println(table.Table(users))
+		//	fmt.Println(table.Table(users))
 
 	} else { //查询单个用户
 		for _, user := range users {
