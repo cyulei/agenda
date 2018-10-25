@@ -30,8 +30,9 @@ func GetMeetings() []entity.Meeting {
 func SaveMeetings(MeetingsToSave []entity.Meeting) {
 	filePath := "datarw/Meetings.json"
 	//清空原文件
-	os.Truncate(filePath, 0)
-
+	if existFile(filePath) {
+		os.Truncate(filePath, 0)
+	}
 	//转为json串
 	josnStr, err := json.Marshal(MeetingsToSave)
 	checkError(err)

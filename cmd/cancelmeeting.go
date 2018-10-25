@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/cyulei/agenda/datarw"
 	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
 )
@@ -56,8 +57,8 @@ func init() {
 }
 func cancelRun() {
 	//load
-	usr := getCurrentUser()
-	meetings := loadMeetings()
+	usr := datarw.GetCurUser()
+	meetings := datarw.GetMeetings()
 	res := make([]entity.Meeting, 1) //for writing
 
 	//adjust the parameters
@@ -96,6 +97,6 @@ func cancelRun() {
 		println("there is a meeting called :", cancel_title, "but you are not the sponsor of it,please try to relog in ?")
 		return
 	}
-	saveMeetings(res)
+	datarw.SaveMeetings(res)
 	println("successfully cancel the meeting :", cancel_title)
 }

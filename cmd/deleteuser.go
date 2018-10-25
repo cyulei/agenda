@@ -60,20 +60,20 @@ func deleteuser() {
 			datarw.SaveCurUser(nil) //登出
 			fmt.Println("User:", curUser.Name, " has been deleted")
 
-				if user.Name == curUser.Name {
-					users = append(users[:index], users[index+1:]...)
-					datarw.SaveUsers(users)
-					fmt.Println("User:", curUser.Name, " has been deleted")
+			if user.Name == curUser.Name {
+				users = append(users[:index], users[index+1:]...)
+				datarw.SaveUsers(users)
+				fmt.Println("User:", curUser.Name, " has been deleted")
 
-			cancleAllmeeting(*curUser) //当前用户取消所有其创建的会议
-			exitAllmeeting(*curUser)   //当前用户退出所有会议
+				cancleAllmeeting(*curUser) //当前用户取消所有其创建的会议
+				exitAllmeeting(*curUser)   //当前用户退出所有会议
 
-			return
+				return
+			}
 		}
+
 	}
 
-		}
-	*/
 	fmt.Println("error: unexpected to execute")
 
 }
