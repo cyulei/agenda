@@ -37,7 +37,7 @@ var changeparticipatorCmd = &cobra.Command{
 	Long: `Current user can change participators of a meeting he sponsors. The adding process\n
 		need date checks, that is to say participators need to have free time for this meeting.\n
 		If a meeting has no participators after this cmd, this meeting will be deleted. For exanple:\n
-		changeparticipator xxx(meeting-title) -d/-a xxx|xxx|xxx`,
+		changeparticipator xxx(meeting-title) -d/-a xxx-xxx-xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
 		current_user := datarw.GetCurUser() //current user
 		if current_user == nil {
