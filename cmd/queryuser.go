@@ -29,8 +29,8 @@ var queryuserCmd = &cobra.Command{
 	Long: `queryuser:Show name,email,phone of users
 	you must login before query
 	For example:
-	agenda queryuser  			:show all registered users' information
-	agenda queryuser -n user1 	:show user1' information if registered
+	agenda queryuser             :show all registered users' information
+	agenda queryuser -n user1    :show user1' information if registered
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 
@@ -57,6 +57,11 @@ func queryuser() {
 	users := datarw.GetUsers()
 
 	if queryuserName == "" { //查询所有用户（因为已登录，所以不可能没有用户）
+
+		for i := range users { //掩盖密码
+			users[i].Password = "********"
+
+		}
 
 		fmt.Println(table.Table(users))
 
