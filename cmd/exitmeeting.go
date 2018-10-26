@@ -90,10 +90,10 @@ func runExit() {
 			if pt == usr { //usr is a participator of meeting mt,we need to remove usr from mt's participators
 				inmeeting = true
 				//remove
-				parts := make([]string, len(pts))
+				parts := make([]string, 0)
 
 				parts = append(parts, pts[0:j]...)
-				parts = append(parts, pts[j:]...)
+				parts = append(parts, pts[j+1:]...)
 				//mt.participators = parts
 				mt.Participators = parts
 				//break

@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/cyulei/agenda/datarw"
 	"github.com/cyulei/agenda/entity"
@@ -49,8 +50,8 @@ var query_all bool
 func init() {
 	rootCmd.AddCommand(querymeetingCmd)
 	querymeetingCmd.Flags().StringVarP(&query_title, "title", "t", "", "the title you want to query")
-	querymeetingCmd.Flags().StringVarP(&query_sDate, "start time", "s", "", "format yyyy-mm-dd-hh:mm")
-	querymeetingCmd.Flags().StringVarP(&query_eDate, "end time", "e", "", "format yyyy-mm-dd-hh:mm")
+	querymeetingCmd.Flags().StringVarP(&query_sDate, "start time", "s", "", "format yyyy-mm-dd-hh-mm")
+	querymeetingCmd.Flags().StringVarP(&query_eDate, "end time", "e", "", "format yyyy-mm-dd-hh-mm")
 	querymeetingCmd.Flags().BoolVarP(&query_all, "all user or current user", "a", false, "query meetings "+
 		"all user has been appeared,if you want query for current user,please don't use it")
 	// Here you will define your flags and configuration settings.
@@ -93,21 +94,26 @@ func runQuery() {
 	}
 	//time_limited = start_limited || end_limited
 
-	if len(query_sDate) != 16 && start_limited || len(query_eDate) != 16 && end_limited {
+	/*if len(query_sDate) != 16 && start_limited || len(query_eDate) != 16 && end_limited {
 		println("date format error,yyyy-mm-dd-hh:mm")
 		return
-	}
+	}*/
 	//func date
 	if start_limited {
 		var err, err1, err2, err3, err4 error
-		sdate.Year, err = strconv.Atoi((string)(query_sDate[0:4]))
-		sdate.Month, err1 = strconv.Atoi(query_sDate[5:7])
-		sdate.Day, err2 = strconv.Atoi(query_sDate[8:10])
-		sdate.Hour, err3 = strconv.Atoi(query_sDate[11:13])
-		sdate.Minute, err4 = strconv.Atoi(query_sDate[14:16])
+		sep := strings.Split(query_sDate, "-")
+		if len(sep) != 5 {
+			println("date format error,yyyy-mm-dd-hh-mm")
+			return
+		}
+		sdate.Year, err = strconv.Atoi((string)(sep[0]))
+		sdate.Month, err1 = strconv.Atoi(sep[1])
+		sdate.Day, err2 = strconv.Atoi(sep[2])
+		sdate.Hour, err3 = strconv.Atoi(sep[3])
+		sdate.Minute, err4 = strconv.Atoi(sep[4])
 
 		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
-			println("date format error,yyyy-mm-dd-hh:mm")
+			println("date format error,yyyy-mm-dd-hh-mm while checking start date")
 			return
 		}
 		if !entity.IsValid(sdate) {
@@ -118,14 +124,17 @@ func runQuery() {
 	}
 	if end_limited {
 		var err, err1, err2, err3, err4 error
-		edate.Year, err = strconv.Atoi((string)(query_eDate[0:4]))
-		edate.Month, err1 = strconv.Atoi(query_eDate[5:7])
-		edate.Day, err2 = strconv.Atoi(query_eDate[8:10])
-		edate.Hour, err3 = strconv.Atoi(query_eDate[11:13])
-		edate.Minute, err4 = strconv.Atoi(query_eDate[14:16])
-
+		sep := strings.Split(query_eDate, "-")
+		if len(sep) != 5 {
+			println("date format error,yyyy-mm-dd-hh-mm,check if you mistake the number of  elements")
+		}
+		sdate.Year, err = strconv.Atoi((string)(sep[0]))
+		sdate.Month, err1 = strconv.Atoi(sep[1])
+		sdate.Day, err2 = strconv.Atoi(sep[2])
+		sdate.Hour, err3 = strconv.Atoi(sep[3])
+		sdate.Minute, err4 = strconv.Atoi(sep[4])
 		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
-			println("date format error,yyyy-mm-dd-hh:mm")
+			println("date format error,yyyy-mm-dd-hh-mm")
 			return
 		}
 		if entity.IsValid(edate) {
