@@ -36,9 +36,9 @@ var (
 var createmeetingCmd = &cobra.Command{
 	Use:   "createmeeting",
 	Short: "Create a meeting",
-	Long: `Current user can create a meeting. You should provide meeting title, start date and end date of this meeting\n
-	and all participators. For example:\n
-	createmeeting -t=new_meeting -s=2007-8-3-13-42 -d=2007-8-3-15-42 -p=xxx-xxx-xxx`,
+	Long: `Current user can create a meeting. You should provide meeting title, start date and end date of this meeting
+	and all participators. For example:
+	createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
 		current_user := datarw.GetCurUser()
 		if current_user == nil {

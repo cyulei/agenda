@@ -26,7 +26,7 @@ import (
 // querymeetingCmd represents the querymeeting command
 var querymeetingCmd = &cobra.Command{
 	Use:   "querymeeting",
-	Short: "使用开始日期，结束日期，标题，是否局限于当前用户四个选项，你可以选择使用四个选项任意的组合，或者不使用任何选项，那将筛选出所有的会议",
+	Short: "Using the start date, the end date, the title, whether it's limited to the current user's four options, you can choose to use any combination of the four options, or not to use any options, which will filter out all the meetings",
 	Long: `query meetings limited by start date or end date or title or current user,any of the four limitation can be added or not added.datarw
 	For example:
 	agenda querymeeting
