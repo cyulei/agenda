@@ -70,8 +70,10 @@ func runExit() {
 	pos := -1
 	inmeeting := false
 	meetingExist := false
+	meetingEmpty := false
 
 	for i := 0; i < len(meetings); i++ {
+		pos = i
 		mt := &meetings[i]
 		if mt.Title != exit_title {
 			continue
@@ -80,7 +82,7 @@ func runExit() {
 
 		if mt.Sponsor == usr {
 			delete = true
-			pos = i
+
 			break
 		}
 
@@ -96,6 +98,10 @@ func runExit() {
 				parts = append(parts, pts[j+1:]...)
 				//mt.participators = parts
 				mt.Participators = parts
+
+				if len(mt.Participators) == 0 {
+					meetingEmpty = true
+				}
 				//break
 				j = len(pts) + 100
 				i = len(meetings) + 100
@@ -119,6 +125,12 @@ func runExit() {
 	//res =meetings
 	if inmeeting == false {
 		fmt.Println("you are not in meeting of title :", exit_title, " please check your spelling ?")
+		return
+	}
+	if meetingEmpty == true {
+		fmt.Println("meeting delete for no participators in")
+		res = append(meetings[0:pos], meetings[pos+1:]...)
+		datarw.SaveMeetings(res)
 		return
 	}
 	fmt.Println("successfully exit the meeting:", exit_title)
