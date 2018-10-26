@@ -68,7 +68,7 @@ var changeparticipatorCmd = &cobra.Command{
 					if len(final_participators) == 0 {
 						meetings = append(meetings[:i], meetings[i+1:]...)
 					} else {
-						j.Participators = final_participators
+						meetings[i].Participators = final_participators
 					}
 					datarw.SaveMeetings(meetings)
 					break
@@ -125,7 +125,7 @@ var changeparticipatorCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(changeparticipatorCmd)
-	changeparticipatorCmd.Flags().StringVarP(&change_meeting_title, "chptitle", "t", "", "meeting title")
+	changeparticipatorCmd.Flags().StringVarP(&change_meeting_title, "title", "t", "", "meeting title")
 	changeparticipatorCmd.MarkFlagRequired("chptitle")
 	changeparticipatorCmd.Flags().BoolVarP(&add_flag, "add", "a", true, "add participator")
 	changeparticipatorCmd.Flags().BoolVarP(&delete_flag, "delete", "d", false, "delete participator")
