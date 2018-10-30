@@ -25,13 +25,8 @@ import (
 // exitmeetingCmd represents the exitmeeting command
 var exitmeetingCmd = &cobra.Command{
 	Use:   "exitmeeting",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "exit meeting , you must login first , if you are the sponser of the meeting,it'll be canceled without assertain",
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		//flag.Parse()
 		runExit()
@@ -63,7 +58,7 @@ func runExit() {
 	}
 	usr := curUsr.Name
 	meetings := datarw.GetMeetings()
-	var res []entity.Meeting
+	var res = make([]entity.Meeting, 0)
 	//check title
 	if exit_title == "empty title" {
 		fmt.Println("please input the title ")
@@ -75,8 +70,10 @@ func runExit() {
 	pos := -1
 	inmeeting := false
 	meetingExist := false
+	meetingEmpty := false
 
 	for i := 0; i < len(meetings); i++ {
+		pos = i
 		mt := &meetings[i]
 		if mt.Title != exit_title {
 			continue
@@ -85,7 +82,7 @@ func runExit() {
 
 		if mt.Sponsor == usr {
 			delete = true
-			pos = i
+
 			break
 		}
 
@@ -95,12 +92,16 @@ func runExit() {
 			if pt == usr { //usr is a participator of meeting mt,we need to remove usr from mt's participators
 				inmeeting = true
 				//remove
-				parts := make([]string, len(pts))
+				parts := make([]string, 0)
 
 				parts = append(parts, pts[0:j]...)
-				parts = append(parts, pts[j:]...)
+				parts = append(parts, pts[j+1:]...)
 				//mt.participators = parts
 				mt.Participators = parts
+
+				if len(mt.Participators) == 0 {
+					meetingEmpty = true
+				}
 				//break
 				j = len(pts) + 100
 				i = len(meetings) + 100
@@ -117,13 +118,19 @@ func runExit() {
 	if delete == true {
 		fmt.Println("you are the sponsor of the meeting,yes you are sure to delete(cancel) the meeting")
 		//delete
-		res = append(meetings[0:pos], meetings[pos:]...)
+		res = append(meetings[0:pos], meetings[pos+1:]...)
 		datarw.SaveMeetings(res)
 		return
 	}
 	//res =meetings
 	if inmeeting == false {
 		fmt.Println("you are not in meeting of title :", exit_title, " please check your spelling ?")
+		return
+	}
+	if meetingEmpty == true {
+		fmt.Println("meeting delete for no participators in")
+		res = append(meetings[0:pos], meetings[pos+1:]...)
+		datarw.SaveMeetings(res)
 		return
 	}
 	fmt.Println("successfully exit the meeting:", exit_title)
