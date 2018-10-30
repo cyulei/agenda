@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/cyulei/agenda/entity"
 )
@@ -17,7 +18,12 @@ func GetMeetings() []entity.Meeting {
 	if existFile(filePath) {
 		josnStr, err := ioutil.ReadFile(filePath)
 		checkError(err)
-
+		//检查是否是空文件
+		str := strings.Replace(string(josnStr), "\n", "", 1)
+		if str == "" {
+			//fmt.Println("Empty")
+			return Meetings
+		}
 		err = json.Unmarshal(josnStr, &Meetings)
 		checkError(err)
 	}
@@ -38,7 +44,8 @@ func SaveMeetings(MeetingsToSave []entity.Meeting) {
 	checkError(err)
 	err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
 	checkError(err)
-
+	//开放文件权限
+	os.Chmod(filePath, 0777)
 }
 
 // TestMeeting is func to test

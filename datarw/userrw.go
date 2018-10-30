@@ -18,7 +18,12 @@ func GetUsers() []entity.User {
 	if existFile(filePath) {
 		josnStr, err := ioutil.ReadFile(filePath)
 		checkError(err)
-
+		//检查是否是空文件
+		str := strings.Replace(string(josnStr), "\n", "", 1)
+		if str == "" {
+			//fmt.Println("Empty")
+			return users
+		}
 		err = json.Unmarshal(josnStr, &users)
 		checkError(err)
 	}
@@ -37,7 +42,8 @@ func SaveUsers(usersToSave []entity.User) {
 	checkError(err)
 	err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
 	checkError(err)
-
+	//开放文件权限
+	os.Chmod(filePath, 0777)
 }
 
 // GetCurUser get a *entity.User from a file

@@ -37,7 +37,7 @@ var changeparticipatorCmd = &cobra.Command{
 	Long: `Current user can change participators of a meeting he sponsors. The adding process\n
 		need date checks, that is to say participators need to have free time for this meeting.\n
 		If a meeting has no participators after this cmd, this meeting will be deleted. For exanple:\n
-		changeparticipator xxx(meeting-title) -d/-a xxx-xxx-xxx`,
+		changeparticipator xxx(meeting-title) -d/-a xxx|xxx|xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
 		current_user := datarw.GetCurUser() //current user
 		if current_user == nil {
@@ -103,11 +103,8 @@ var changeparticipatorCmd = &cobra.Command{
 							if isParticipatorExistinMeeting(k, j) {
 								fmt.Println(k + " is already in this meeting")
 							} else {
-								if isParticipatorAvailable(k, meetings, j) {
-									meetings[i].Participators = append(meetings[i].Participators, k)
-								} else {
-									fmt.Println(k + " is not free")
-								}
+								fmt.Println("hh3")
+								meetings[i].Participators = append(meetings[i].Participators, k)
 							}
 						}
 						datarw.SaveMeetings(meetings)
@@ -117,6 +114,7 @@ var changeparticipatorCmd = &cobra.Command{
 				if !meeting_exist {
 					fmt.Println("No such meeting, check meeting title")
 				}
+				fmt.Println("changeparticipator called")
 			}
 		}
 		fmt.Println("changeparticipator finished")
@@ -161,9 +159,6 @@ func isParticipatorExist(name string, participators []entity.User) bool {
 }
 
 func isParticipatorExistinMeeting(name string, meeting entity.Meeting) bool {
-	if name == meeting.Sponsor {
-		return true
-	}
 	for _, j := range meeting.Participators {
 		if name == j {
 			return true
