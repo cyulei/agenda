@@ -1,8 +1,19 @@
-[Info]2018/10/30 13:42:54 changeparticipator.go:52: Cmd changeparticipator called
-[Error]2018/10/30 13:42:54 changeparticipator.go:134: No such meeting, check meeting title
-[Info]2018/10/30 13:42:54 changeparticipator.go:140: Cmd changeparticipator finished
-[Info]2018/10/30 13:43:02 changeparticipator.go:52: Cmd changeparticipator called
-[Info]2018/10/30 13:43:02 changeparticipator.go:140: Cmd changeparticipator finished
-[Info]2018/10/30 13:43:21 changeparticipator.go:52: Cmd changeparticipator called
-[Warning]2018/10/30 13:43:21 changeparticipator.go:98: Some users don't exist in this meeting
-[Info]2018/10/30 13:43:21 changeparticipator.go:140: Cmd changeparticipator finished
+[Info]2018/10/30 16:02:20 createmeeting.go:52: Cmd createmeeting called
+[Error]2018/10/30 16:02:20 createmeeting.go:96: Sponsor not free
+[Error]2018/10/30 16:02:20 createmeeting.go:98: Cmd createmeeting failed
+[Info]2018/10/30 16:02:35 createmeeting.go:52: Cmd createmeeting called
+[Info]2018/10/30 16:02:35 createmeeting.go:114: Cmd createmeeting finished
+[Info]2018/10/30 16:03:05 changeparticipator.go:52: Cmd changeparticipator called
+[Info]2018/10/30 16:03:05 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:03:08 changeparticipator.go:52: Cmd changeparticipator called
+[Info]2018/10/30 16:03:08 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:03:12 changeparticipator.go:52: Cmd changeparticipator called
+[Info]2018/10/30 16:03:12 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:03:28 changeparticipator.go:52: Cmd changeparticipator called
+[Warning]2018/10/30 16:03:28 changeparticipator.go:99: Some users don't exist in this meeting
+[Info]2018/10/30 16:03:28 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:03:43 changeparticipator.go:52: Cmd changeparticipator called
+[Warning]2018/10/30 16:03:43 changeparticipator.go:99: Some users don't exist in this meeting
+[Info]2018/10/30 16:03:43 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:20:59 clearmeeting.go:45: Cmd clearmeeting called
+[Info]2018/10/30 16:20:59 clearmeeting.go:76: Cmd clearmeeting finished
