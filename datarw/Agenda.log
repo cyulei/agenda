@@ -1,0 +1,8 @@
+[Info]2018/10/30 13:42:54 changeparticipator.go:52: Cmd changeparticipator called
+[Error]2018/10/30 13:42:54 changeparticipator.go:134: No such meeting, check meeting title
+[Info]2018/10/30 13:42:54 changeparticipator.go:140: Cmd changeparticipator finished
+[Info]2018/10/30 13:43:02 changeparticipator.go:52: Cmd changeparticipator called
+[Info]2018/10/30 13:43:02 changeparticipator.go:140: Cmd changeparticipator finished
+[Info]2018/10/30 13:43:21 changeparticipator.go:52: Cmd changeparticipator called
+[Warning]2018/10/30 13:43:21 changeparticipator.go:98: Some users don't exist in this meeting
+[Info]2018/10/30 13:43:21 changeparticipator.go:140: Cmd changeparticipator finished

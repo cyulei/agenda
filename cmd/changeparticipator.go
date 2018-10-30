@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"strings"
 
 	"github.com/cyulei/agenda/datarw"
@@ -37,11 +39,24 @@ var changeparticipatorCmd = &cobra.Command{
 	Long: `Current user can change participators of a meeting he sponsors. The adding process\n
 		need date checks, that is to say participators need to have free time for this meeting.\n
 		If a meeting has no participators after this cmd, this meeting will be deleted. For exanple:\n
-		changeparticipator xxx(meeting-title) -d/-a xxx|xxx|xxx`,
+		changeparticipator -t xxx(meeting-title) -d/-a xxx-xxx-xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
-		current_user := datarw.GetCurUser() //current user
+		//log
+		fileName := "datarw/Agenda.log"
+		logFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+		defer logFile.Close()
+		if err != nil {
+			log.Fatalln("Open file error")
+		}
+		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
+		infoLog.Println("Cmd changeparticipator called")
+
+		//current user
+		current_user := datarw.GetCurUser()
 		if current_user == nil {
-			fmt.Println("Please log first")
+			infoLog.SetPrefix("[Error]")
+			infoLog.Println("Not log in yet")
+			fmt.Println("Please log in first")
 			return
 		}
 
@@ -75,8 +90,12 @@ var changeparticipatorCmd = &cobra.Command{
 				}
 			}
 			if !meeting_exist {
+				infoLog.SetPrefix("[Error]")
+				infoLog.Println("No such meeting, check meeting title")
 				fmt.Println("No such meeting, check meeting title")
 			} else if len(delete_participators) != len(change_participators) {
+				infoLog.SetPrefix("[Warning]")
+				infoLog.Println("Some users don't exist in this meeting")
 				fmt.Println("Some users don't exist in this meeting. Already delete: ")
 				for _, j := range delete_participators {
 					fmt.Println(j)
@@ -103,7 +122,6 @@ var changeparticipatorCmd = &cobra.Command{
 							if isParticipatorExistinMeeting(k, j) {
 								fmt.Println(k + " is already in this meeting")
 							} else {
-								fmt.Println("hh3")
 								meetings[i].Participators = append(meetings[i].Participators, k)
 							}
 						}
@@ -112,11 +130,14 @@ var changeparticipatorCmd = &cobra.Command{
 					}
 				}
 				if !meeting_exist {
+					infoLog.SetPrefix("[Error]")
+					infoLog.Println("No such meeting, check meeting title")
 					fmt.Println("No such meeting, check meeting title")
 				}
-				fmt.Println("changeparticipator called")
 			}
 		}
+		infoLog.SetPrefix("[Info]")
+		infoLog.Println("Cmd changeparticipator finished")
 		fmt.Println("changeparticipator finished")
 	},
 }
@@ -127,7 +148,7 @@ func init() {
 	changeparticipatorCmd.MarkFlagRequired("chptitle")
 	changeparticipatorCmd.Flags().BoolVarP(&add_flag, "add", "a", true, "add participator")
 	changeparticipatorCmd.Flags().BoolVarP(&delete_flag, "delete", "d", false, "delete participator")
-	changeparticipatorCmd.Flags().StringVarP(&participator_name, "name", "n", "", "participator's name")
+	changeparticipatorCmd.Flags().StringVarP(&participator_name, "name", "p", "", "participator's name")
 	changeparticipatorCmd.MarkFlagRequired("name")
 	// Here you will define your flags and configuration settings.
 
