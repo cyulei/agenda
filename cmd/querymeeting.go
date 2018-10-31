@@ -238,13 +238,7 @@ func DisplayMeeting(mt []entity.Meeting) {
 		print("\t")
 		for _, p := range meeting.Participators {
 			print(p)
-			for j := 4; j <= standardNameLength; j += 4 {
-				if len(p) < j {
-					for k := j - 4; k < standardNameLength; k += 4 {
-						print("\t")
-					}
-				}
-			}
+			print("\t")
 		}
 
 		println()
