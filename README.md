@@ -95,6 +95,50 @@ agenda clearmeeting (-i)
 
 ### agenda cancelmeeting
 
+  已登录用户取消自己创建的会议记录，参数：会议标题（-t title）
+    
+   使用范例
+```
+   agenda cancelmeeting -t health
+```
 ### agenda querymeeting
 
+  查询会议并打印，参数：-a,-s 开始日期, -e 结束日期,
+  
+  范例：
+  
+```
+  agenda querymeeting
+```
+
+  命令翻译：查询已登录用户的所有会议，包括作为发起者和参与者的会议，必须先登录
+
+```
+   agenda querymeeting -a
+```
+
+  命令翻译：查询所有用户的所有会议，允许未登录状态下查询
+    
+```
+    agenda querymeeting -s 2018-1-1-1-1
+```
+
+  命令翻译：查询开始时间晚于2018年1月1日1时1分的会议
+    
+```
+    agenda querymeeting -e 2018-1-2-1-1
+```
+
+  命令翻译： 查询结束时间早于2018年1月2日1时1分的会议
+  
+  注意：  -a,-s,-t可以随意套用
+
 ### agenda exitmeeting
+
+  退出作为参与者的会议，如果是会议发起者，那么删除,必须先登录
+  
+  范例：
+```
+    agenda exitmeeting -t title
+```
+    
