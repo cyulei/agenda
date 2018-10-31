@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"strconv"
 	"strings"
 
@@ -65,6 +67,16 @@ func init() {
 	// querymeetingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 func runQuery() {
+	fileName := "datarw/Agenda.log"
+	var logh *log.Logger
+	logFile, errlog := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+	if errlog != nil {
+		println("error with open log file ", fileName)
+	} else {
+		logh = log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
+		logh.Println("querymeeting called")
+	}
+
 	//	load
 	//datarw.SaveMeetings
 	var meetings = datarw.GetMeetings()
@@ -85,6 +97,10 @@ func runQuery() {
 
 	if usr_limited && !usr_logged { //想要查询当前登录的用户的会议但是又没有登录
 		println("you can not query for the current logged user,please login first! ")
+		if errlog == nil {
+			logh.SetPrefix("[Error]")
+			logh.Println("want to query meeting for specified user but not log in")
+		}
 		return
 	}
 	if query_sDate != "" {
@@ -104,6 +120,10 @@ func runQuery() {
 		sep := strings.Split(query_sDate, "-")
 		if len(sep) != 5 {
 			println("date format error,yyyy-mm-dd-hh-mm")
+			if errlog == nil {
+				logh.SetPrefix("[Error]")
+				logh.Println("start date input format error with input sample", query_sDate)
+			}
 			return
 		}
 		sdate.Year, err = strconv.Atoi((string)(sep[0]))
@@ -114,11 +134,19 @@ func runQuery() {
 
 		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
 			println("date format error,yyyy-mm-dd-hh-mm while checking start date")
+			if errlog == nil {
+				logh.SetPrefix("[Error]")
+				logh.Println("start date input format error with input sample", query_sDate)
+			}
 			return
 		}
 		if !entity.IsValid(sdate) {
 			println(sdate.Year, sdate.Month, sdate.Day, sdate.Hour, sdate.Minute)
 			println("check your date number,pay attention to max day of the month and care for the leap year")
+			if errlog == nil {
+				logh.SetPrefix("[Error]")
+				logh.Println("start date input range error with input sample", query_sDate)
+			}
 			return
 		}
 	}
@@ -127,6 +155,11 @@ func runQuery() {
 		sep := strings.Split(query_eDate, "-")
 		if len(sep) != 5 {
 			println("date format error,yyyy-mm-dd-hh-mm,check if you mistake the number of  elements")
+			if errlog == nil {
+				logh.SetPrefix("[Error]")
+				logh.Println("end date input format error with input sample", query_eDate)
+			}
+			return
 		}
 		sdate.Year, err = strconv.Atoi((string)(sep[0]))
 		sdate.Month, err1 = strconv.Atoi(sep[1])
@@ -135,10 +168,18 @@ func runQuery() {
 		sdate.Minute, err4 = strconv.Atoi(sep[4])
 		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
 			println("date format error,yyyy-mm-dd-hh-mm")
+			if errlog == nil {
+				logh.SetPrefix("[Error]")
+				logh.Println("end date input format error with input sample", query_eDate)
+			}
 			return
 		}
 		if entity.IsValid(edate) {
 			println("check your date number,pay attention to max day of the month and care for the leap year")
+			if errlog == nil {
+				logh.SetPrefix("[Error]")
+				logh.Println("end date input range error with input sample", query_eDate)
+			}
 			return
 		}
 	}
@@ -238,13 +279,7 @@ func DisplayMeeting(mt []entity.Meeting) {
 		print("\t")
 		for _, p := range meeting.Participators {
 			print(p)
-			for j := 4; j <= standardNameLength; j += 4 {
-				if len(p) < j {
-					for k := j - 4; k < standardNameLength; k += 4 {
-						print("\t")
-					}
-				}
-			}
+			print("\t")
 		}
 
 		println()
