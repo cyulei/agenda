@@ -9,9 +9,32 @@
 可在help后添加相应的命令名字，如`agenda help login`即可显示`login`命令的相关帮助
 
 ### agenda login
+用户登录。用户登陆需要提供用户名和密码，只有在没有登陆的状态下，用户名注册过且密码正确则登陆成功。
+
+使用范例：(already log out) 
+```
+agenda login -u username1 -p password
+```
+
+可用参数列表
+```
+  -h, --help              help for login
+  -p, --password string   user password
+  -u, --username string   user name
+```
 
 ### agenda logout
+用户登出。用户登出不用使用任何参数，在已经登陆的情况下可以退出成功。
 
+使用范例：(already log in) 
+```
+agenda logout
+```
+
+可用参数列表
+```
+  -h, --help   help for logout
+```
 ### agenda register
 
 ### agenda queryuser
@@ -72,6 +95,50 @@ agenda clearmeeting (-i)
 
 ### agenda cancelmeeting
 
+  已登录用户取消自己创建的会议记录，参数：会议标题（-t title）
+    
+   使用范例
+```
+   agenda cancelmeeting -t health
+```
 ### agenda querymeeting
 
+  查询会议并打印，参数：-a,-s 开始日期, -e 结束日期,
+  
+  范例：
+  
+```
+  agenda querymeeting
+```
+
+  命令翻译：查询已登录用户的所有会议，包括作为发起者和参与者的会议，必须先登录
+
+```
+   agenda querymeeting -a
+```
+
+  命令翻译：查询所有用户的所有会议，允许未登录状态下查询
+    
+```
+    agenda querymeeting -s 2018-1-1-1-1
+```
+
+  命令翻译：查询开始时间晚于2018年1月1日1时1分的会议
+    
+```
+    agenda querymeeting -e 2018-1-2-1-1
+```
+
+  命令翻译： 查询结束时间早于2018年1月2日1时1分的会议
+  
+  注意：  -a,-s,-t可以随意套用
+
 ### agenda exitmeeting
+
+  退出作为参与者的会议，如果是会议发起者，那么删除,必须先登录
+  
+  范例：
+```
+    agenda exitmeeting -t title
+```
+    
