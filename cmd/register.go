@@ -53,6 +53,10 @@ func init() {
 }
 
 func register(name string, password string) {
+	logInit()
+	defer logFile.Close()
+
+	logSave("cmd: register called", "[Info]")
 
 	if isValidName(name) && isValidPassword(password) {
 
@@ -68,7 +72,8 @@ func register(name string, password string) {
 				newuser := entity.User{Name: name, Password: password, Email: email, Phone: phone}
 				users = append(users, newuser)
 				datarw.SaveUsers(users)
-				fmt.Println("Registration complete")
+				logSave("Registration complete", "[Info]")
+
 				return
 
 			}
@@ -76,8 +81,7 @@ func register(name string, password string) {
 		}
 
 	}
-
-	fmt.Println("Register fail")
+	logSave("Register fail", "[Warning]")
 
 }
 
@@ -86,7 +90,8 @@ func hasName(name string, users []entity.User) bool {
 
 	for _, user := range users {
 		if user.Name == name {
-			fmt.Println("The Username has been registered")
+			logSave("The Username has been registered", "[Warning]")
+
 			return true
 		}
 	}
@@ -97,7 +102,7 @@ func isValidName(n string) bool {
 	b := []byte(n)
 	val, _ := regexp.Match(".+", b)
 	if !val {
-		fmt.Println("flag -n ,name is invaild")
+		logSave("flag -n ,name is invaild", "[Warning]")
 	}
 	return val
 }
@@ -109,7 +114,7 @@ func isValidPassword(p string) bool {
 		val = false
 	}
 	if !val {
-		fmt.Println("flag -p ,password is invaild")
+		logSave("flag -p ,password is invaild", "[Warning]")
 	}
 	return val
 }
@@ -118,7 +123,7 @@ func isValidEmail(e string) bool {
 	val, _ := regexp.Match("\\w*@\\w*\\.w*", b)
 
 	if !val {
-		fmt.Println("email is invaild")
+		logSave("email is invaild", "[Warning]")
 	}
 	return val
 }
@@ -128,7 +133,7 @@ func isValidPhone(p string) bool {
 	val, _ := regexp.Match("[0-9]+", b)
 
 	if !val {
-		fmt.Println("phone is invaild")
+		logSave("phone is invaild", "[Warning]")
 	}
 	return val
 }

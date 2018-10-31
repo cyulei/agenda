@@ -35,7 +35,7 @@ var queryuserCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		queryuser()
-		fmt.Println("queryuser complete")
+
 	},
 }
 
@@ -47,10 +47,16 @@ func init() {
 var queryuserName string
 
 func queryuser() {
-	curUser := datarw.GetCurUser()
+	logInit()
+	defer logFile.Close()
+
+	curUser = datarw.GetCurUser()
+
 	if curUser == nil { //是否已登陆
-		fmt.Println("isn't login,please use command login first")
+		logSave("isn't login,please use command login", "[Error]")
 		return
+	} else {
+		logSave("cmd: queryuser called", "[Info]")
 	}
 
 	//获取所有用户
@@ -72,8 +78,9 @@ func queryuser() {
 				return //查询成功
 			}
 		}
-		fmt.Println(queryuserName, "isn't registered") //查询失败
+		logSave(queryuserName+"doesn't registered", "[Warning]") //查询失败
 
 	}
 
+	logSave("cmd: queryuser success", "[Info]")
 }

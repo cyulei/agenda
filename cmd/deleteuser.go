@@ -17,6 +17,8 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
+
 	"github.com/cyulei/agenda/datarw"
 	"github.com/cyulei/agenda/entity"
 	"github.com/spf13/cobra"
@@ -32,7 +34,7 @@ var deleteuserCmd = &cobra.Command{
 	agenda deleteuser  			:delete CurUser and logout
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("deleteuser called")
+
 		deleteuser()
 	},
 }
@@ -41,11 +43,44 @@ func init() {
 	rootCmd.AddCommand(deleteuserCmd)
 
 }
+
+var infoLog *log.Logger
+var logFile *os.File
+
+func logInit() {
+	fileName := "datarw/Agenda.log"
+	logFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+
+	if err != nil {
+		log.Fatalln("Open file error")
+	}
+	infoLog = log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
+	infoLog.Println("Cmd deleteuser called")
+}
+func logSave(str string, logType string) {
+	fmt.Println(str)
+	infoLog.SetPrefix(logType)
+	if curUser != nil {
+		infoLog.Println("curUser: " + curUser.Name + "  " + str)
+	} else {
+		infoLog.Println(str)
+	}
+
+}
+
+var curUser *entity.User
+
 func deleteuser() {
-	curUser := datarw.GetCurUser()
+	logInit()
+	defer logFile.Close()
+
+	curUser = datarw.GetCurUser()
+
 	if curUser == nil { //是否已登陆
-		fmt.Println("isn't login,please use command login")
+		logSave("isn't login,please use command login", "[Error]")
 		return
+	} else {
+		logSave("cmd: deleteuser called", "[Info]")
 	}
 
 	//获取所有用户
@@ -56,18 +91,18 @@ func deleteuser() {
 			users = append(users[:index], users[index+1:]...)
 			datarw.SaveUsers(users)
 			datarw.SaveCurUser(nil) //登出
-			fmt.Println("User:", curUser.Name, " has been deleted")
 
 			/*会议相关*/
 
 			cancleAllmeeting(*curUser) //当前用户取消所有其创建的会议
 			exitAllmeeting(*curUser)   //当前用户退出所有会议
 
+			logSave("cmd: deleteuser success", "[Info]")
 			return
 		}
 	}
 
-	fmt.Println("error: unexpected to execute")
+	logSave("unexpected to execute", "[Error]")
 
 }
 
