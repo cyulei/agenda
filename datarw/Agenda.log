@@ -1,0 +1,54 @@
+[Info]2018/10/30 16:02:20 createmeeting.go:52: Cmd createmeeting called
+[Error]2018/10/30 16:02:20 createmeeting.go:96: Sponsor not free
+[Error]2018/10/30 16:02:20 createmeeting.go:98: Cmd createmeeting failed
+[Info]2018/10/30 16:02:35 createmeeting.go:52: Cmd createmeeting called
+[Info]2018/10/30 16:02:35 createmeeting.go:114: Cmd createmeeting finished
+[Info]2018/10/30 16:03:05 changeparticipator.go:52: Cmd changeparticipator called
+[Info]2018/10/30 16:03:05 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:03:08 changeparticipator.go:52: Cmd changeparticipator called
+[Info]2018/10/30 16:03:08 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:03:12 changeparticipator.go:52: Cmd changeparticipator called
+[Info]2018/10/30 16:03:12 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:03:28 changeparticipator.go:52: Cmd changeparticipator called
+[Warning]2018/10/30 16:03:28 changeparticipator.go:99: Some users don't exist in this meeting
+[Info]2018/10/30 16:03:28 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:03:43 changeparticipator.go:52: Cmd changeparticipator called
+[Warning]2018/10/30 16:03:43 changeparticipator.go:99: Some users don't exist in this meeting
+[Info]2018/10/30 16:03:43 changeparticipator.go:141: Cmd changeparticipator finished
+[Info]2018/10/30 16:20:59 clearmeeting.go:45: Cmd clearmeeting called
+[Info]2018/10/30 16:20:59 clearmeeting.go:76: Cmd clearmeeting finished
+[Info]2018/10/31 13:07:10 exitmeeting.go:122: exitmeeting called
+[Info]2018/10/31 13:09:15 createmeeting.go:52: Cmd createmeeting called
+[Error]2018/10/31 13:09:15 createmeeting.go:129: No valid participators
+[Error]2018/10/31 13:09:15 createmeeting.go:133: Cmd createmeeting failed
+[Info]2018/10/31 13:09:24 createmeeting.go:52: Cmd createmeeting called
+[Error]2018/10/31 13:09:24 createmeeting.go:129: No valid participators
+[Error]2018/10/31 13:09:24 createmeeting.go:133: Cmd createmeeting failed
+[Info]2018/10/31 13:09:30 createmeeting.go:52: Cmd createmeeting called
+[Error]2018/10/31 13:09:30 createmeeting.go:129: No valid participators
+[Error]2018/10/31 13:09:30 createmeeting.go:133: Cmd createmeeting failed
+[Info]2018/10/31 13:10:33 createmeeting.go:52: Cmd createmeeting called
+[Error]2018/10/31 13:10:33 createmeeting.go:129: No valid participators
+[Error]2018/10/31 13:10:33 createmeeting.go:133: Cmd createmeeting failed
+[Info]2018/10/31 13:10:57 createmeeting.go:52: Cmd createmeeting called
+[Error]2018/10/31 13:10:57 createmeeting.go:129: No valid participators
+[Error]2018/10/31 13:10:57 createmeeting.go:133: Cmd createmeeting failed
+[Info]2018/10/31 13:11:47 exitmeeting.go:122: exitmeeting called
+[Error]2018/10/31 13:11:47 exitmeeting.go:129: exitmeeting a  meeting not exist
+[Info]2018/10/31 13:12:35 createmeeting.go:52: Cmd createmeeting called
+[Error]2018/10/31 13:12:35 createmeeting.go:129: No valid participators
+[Error]2018/10/31 13:12:35 createmeeting.go:133: Cmd createmeeting failed
+[Info]2018/10/31 13:13:06 createmeeting.go:52: Cmd createmeeting called
+[Info]2018/10/31 13:13:06 createmeeting.go:114: Cmd createmeeting finished
+[Info]2018/10/31 13:21:34 querymeeting.go:77: querymeeting called
+[Info]2018/10/31 13:22:03 querymeeting.go:77: querymeeting called
+[Error]2018/10/31 13:22:03 querymeeting.go:125: start date input format error with input sample 2018
+[Info]2018/10/31 13:28:29 cancelmeeting.go:64: cancelmeeting called
+[Error]2018/10/31 13:28:29 cancelmeeting.go:76: lack of title parameter when cancel mmeting
+[Info]2018/10/31 13:28:49 cancelmeeting.go:64: cancelmeeting called
+[Warning]2018/10/31 13:28:49 cancelmeeting.go:107: user  &{hh1 12345678 1485578188@qq.com 15920823518}  delete a meeting that is not existed, the input title is  heihie
+[Info]2018/10/31 13:29:35 cancelmeeting.go:64: cancelmeeting called
+[Warning]2018/10/31 13:29:35 cancelmeeting.go:107: user  hh1  delete a meeting that is not existed, the input title is  heihie
+[Info]2018/10/31 13:30:10 cancelmeeting.go:64: cancelmeeting called
+[Info]2018/10/31 13:35:26 cancelmeeting.go:64: cancelmeeting called
+[Error]2018/10/31 13:35:26 cancelmeeting.go:91: not log in when cancelmeeting

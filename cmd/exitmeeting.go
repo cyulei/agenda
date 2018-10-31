@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/cyulei/agenda/datarw"
 	"github.com/cyulei/agenda/entity"
@@ -50,6 +52,7 @@ func init() {
 }
 
 func runExit() {
+
 	//load data
 	curUsr := datarw.GetCurUser()
 	if curUsr == nil {
@@ -109,14 +112,34 @@ func runExit() {
 		}
 
 	}
+	fileName := "datarw/Agenda.log"
+	var logh *log.Logger
+	logFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+	if err != nil {
+		println("error with open log file ", fileName)
+	} else {
+		logh = log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
+		logh.Println("exitmeeting called")
+	}
+
 	if meetingExist == false {
 		fmt.Println("no such meeting,", exit_title, "please check you title spelling")
+		if err == nil {
+			logh.SetPrefix("[Error]")
+			logh.Println("exitmeeting a  meeting not exist")
+		}
+
 		//saveMeetings(meetings)
 		//meeting_title
 		return
 	}
 	if delete == true {
 		fmt.Println("you are the sponsor of the meeting,yes you are sure to delete(cancel) the meeting")
+		if err == nil {
+			logh.SetPrefix("[Warning]")
+			logh.Println("user ", usr, " exit  meeting ", exit_title, ",which is sponsed by himself/herself .meeting ", exit_title,
+				" has been deleted now because of no sponser")
+		}
 		//delete
 		res = append(meetings[0:pos], meetings[pos+1:]...)
 		datarw.SaveMeetings(res)
@@ -125,10 +148,18 @@ func runExit() {
 	//res =meetings
 	if inmeeting == false {
 		fmt.Println("you are not in meeting of title :", exit_title, " please check your spelling ?")
+		if err == nil {
+			logh.SetPrefix("[Info]")
+			logh.Println("user:", usr, " want to exitmeeting ", exit_title, " but he/she does not take part in it,and be surely refused")
+		}
 		return
 	}
 	if meetingEmpty == true {
 		fmt.Println("meeting delete for no participators in")
+		if err == nil {
+			logh.SetPrefix("[Warning]")
+			logh.Println("meeting ", exit_title, " has been deleted because of no participator")
+		}
 		res = append(meetings[0:pos], meetings[pos+1:]...)
 		datarw.SaveMeetings(res)
 		return

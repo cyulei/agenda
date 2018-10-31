@@ -16,7 +16,8 @@ package cmd
 
 import (
 	"fmt"
-	"strconv"
+	"log"
+	"os"
 	"strings"
 
 	"github.com/cyulei/agenda/datarw"
@@ -36,13 +37,27 @@ var (
 var createmeetingCmd = &cobra.Command{
 	Use:   "createmeeting",
 	Short: "Create a meeting",
-	Long: `Current user can create a meeting. You should provide meeting title, start date and end date of this meeting\n
-	and all participators. For example:\n
-	createmeeting -t=new_meeting -s=2007-8-3-13-42 -d=2007-8-3-15-42 -p=xxx-xxx-xxx`,
+	Long: `Current user can create a meeting. You should provide meeting title, start date and end date of this meeting
+and all participators. For example:
+createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
+		//log
+		fileName := "datarw/Agenda.log"
+		logFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+		defer logFile.Close()
+		if err != nil {
+			log.Fatalln("Open file error")
+		}
+		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
+		infoLog.Println("Cmd createmeeting called")
+
 		current_user := datarw.GetCurUser()
 		if current_user == nil {
+			infoLog.SetPrefix("[Error]")
+			infoLog.Println("Not log in yet")
 			fmt.Println("Please log first")
+			infoLog.Println("Cmd createmeeting failed")
+			fmt.Println("createmeeting failed")
 			return
 		}
 		sponsor_name = current_user.Name
@@ -53,28 +68,40 @@ var createmeetingCmd = &cobra.Command{
 		end_date_string := strings.Split(create_end_date, "-")
 		var s_date, e_date entity.Date
 		if len(start_date_string) != 5 || len(end_date_string) != 5 {
+			infoLog.SetPrefix("[Error]")
+			infoLog.Println("Wrong date format")
 			fmt.Println("Wrong date format. Should be Year-Month-Day-Hour-Minute")
+			infoLog.Println("Cmd createmeeting failed")
+			fmt.Println("createmeeting failed")
 			return
 		} else {
-			s_date1, flag1 := convert(start_date_string)
-			e_date1, flag2 := convert(end_date_string)
+			s_date1, flag1 := entity.Convert(start_date_string)
+			e_date1, flag2 := entity.Convert(end_date_string)
 			s_date = s_date1
 			e_date = e_date1
 			if !flag1 || !flag2 {
+				infoLog.SetPrefix("[Error]")
+				infoLog.Println("Wrong date format")
 				fmt.Println("Wrong date format. Should be Year-Month-Day-Hour-Minute")
+				infoLog.Println("Cmd createmeeting failed")
+				fmt.Println("createmeeting failed")
 				return
 			}
 		}
 		var temp_meeting entity.Meeting
 		temp_meeting.Startdate = s_date
 		temp_meeting.Enddate = e_date
-		if !isParticipatorAvailable(current_user.Name, meetings, temp_meeting) {
+		if !entity.IsParticipatorAvailable(current_user.Name, meetings, temp_meeting) {
+			infoLog.SetPrefix("[Error]")
+			infoLog.Println("Sponsor not free")
 			fmt.Println("Sponsor is not free")
+			infoLog.Println("Cmd createmeeting failed")
+			fmt.Println("createmeeting failed")
 			return
 		}
 
-		valid_participators, ok := check_participators(change_participators, users, meetings, s_date, e_date)
-		if check_title(create_meeting_title, meetings) && check_date(s_date, e_date) && ok {
+		valid_participators, ok := entity.Check_participators(sponsor_name, change_participators, users, meetings, s_date, e_date)
+		if entity.Check_title(create_meeting_title, meetings) && entity.Check_date(s_date, e_date) && ok {
 			var new_meeting entity.Meeting
 			new_meeting.Sponsor = current_user.Name
 			new_meeting.Title = create_meeting_title
@@ -83,17 +110,27 @@ var createmeetingCmd = &cobra.Command{
 			new_meeting.Participators = valid_participators
 			meetings = append(meetings, new_meeting)
 			datarw.SaveMeetings(meetings)
+			infoLog.SetPrefix("[Info]")
+			infoLog.Println("Cmd createmeeting finished")
 			fmt.Println("createmeeting finished")
 		} else {
-			if !check_title(create_meeting_title, meetings) {
+			if !entity.Check_title(create_meeting_title, meetings) {
+				infoLog.SetPrefix("[Error]")
+				infoLog.Println("Meeting exists")
 				fmt.Println("Meeting exists, change meeting title")
 			}
-			if !check_date(s_date, e_date) {
+			if !entity.Check_date(s_date, e_date) {
+				infoLog.SetPrefix("[Error]")
+				infoLog.Println("Invalid start/end date")
 				fmt.Println("Invalid start/end date, please check")
 			}
 			if !ok {
+				infoLog.SetPrefix("[Error]")
+				infoLog.Println("No valid participators")
 				fmt.Println("No valid participators (busy or not exists)")
 			}
+			infoLog.SetPrefix("[Error]")
+			infoLog.Println("Cmd createmeeting failed")
 			fmt.Println("createmeeting failed")
 		}
 
@@ -119,63 +156,4 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// createmeetingCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-func convert(date_string []string) (entity.Date, bool) {
-	year, flag1 := strconv.Atoi(date_string[0])
-	month, flag2 := strconv.Atoi(date_string[1])
-	day, flag3 := strconv.Atoi(date_string[2])
-	hour, flag4 := strconv.Atoi(date_string[3])
-	minute, flag5 := strconv.Atoi(date_string[4])
-
-	var date entity.Date
-	if flag1 == nil && flag2 == nil && flag3 == nil && flag4 == nil && flag5 == nil {
-		date.Year = year
-		date.Month = month
-		date.Day = day
-		date.Hour = hour
-		date.Minute = minute
-		return date, true
-	} else {
-		return date, false
-	}
-
-}
-
-func check_participators(participators []string, all_users []entity.User, all_meetings []entity.Meeting, s_date entity.Date, e_date entity.Date) ([]string, bool) {
-	var valid_participators []string
-	var temp_meeting entity.Meeting
-	temp_meeting.Startdate = s_date
-	temp_meeting.Enddate = e_date
-
-	for _, j := range participators {
-		if isParticipatorExist(j, all_users) && j != sponsor_name {
-			if isParticipatorAvailable(j, all_meetings, temp_meeting) {
-				valid_participators = append(valid_participators, j)
-			}
-		}
-	}
-	if len(valid_participators) == 0 {
-		return valid_participators, false
-	} else {
-		return valid_participators, true
-	}
-}
-
-func check_title(meeting_title string, all_meetings []entity.Meeting) bool {
-	for _, j := range all_meetings {
-		if j.Title == meeting_title {
-			return false
-		}
-	}
-	return true
-}
-
-func check_date(date1 entity.Date, date2 entity.Date) bool {
-	if entity.IsValid(date1) && entity.IsValid(date2) {
-		if entity.Compare(date2, date1) >= 0 {
-			return true
-		}
-	}
-	return false
 }
