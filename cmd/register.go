@@ -68,7 +68,7 @@ func register(name string, password string) {
 
 		if isValidEmail(email) && isValidPhone(phone) {
 			users := datarw.GetUsers()
-			if !hasName(name, users) {
+			if !entity.HasUser(name, users) {
 				newuser := entity.User{Name: name, Password: password, Email: email, Phone: phone}
 				users = append(users, newuser)
 				datarw.SaveUsers(users)
@@ -76,6 +76,8 @@ func register(name string, password string) {
 
 				return
 
+			} else {
+				logSave("The Username has been registered", "[Warning]")
 			}
 
 		}
@@ -85,19 +87,6 @@ func register(name string, password string) {
 
 }
 
-//Judge username exists
-func hasName(name string, users []entity.User) bool {
-
-	for _, user := range users {
-		if user.Name == name {
-			logSave("The Username has been registered", "[Warning]")
-
-			return true
-		}
-	}
-
-	return false
-}
 func isValidName(n string) bool {
 	b := []byte(n)
 	val, _ := regexp.Match(".+", b)

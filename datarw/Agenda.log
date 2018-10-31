@@ -108,3 +108,6 @@
 [Info]2018/10/31 23:21:45 deleteuser.go:58: Cmd deleteuser called
 [Info]2018/10/31 23:21:45 deleteuser.go:66: cmd: register called
 [Info]2018/10/31 23:21:53 deleteuser.go:66: Registration complete
+[Info]2018/10/31 23:54:17 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:54:17 deleteuser.go:64: curUser: hh1  cmd: queryuser called
+[Info]2018/10/31 23:54:17 deleteuser.go:64: curUser: hh1  cmd: queryuser success

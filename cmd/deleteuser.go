@@ -136,20 +136,8 @@ func exitAllmeeting(user entity.User) {
 
 	}
 
-	meetings = deleteEmptyMeeting(meetings)
+	meetings = entity.DeleteEmptyMeeting(meetings)
 
 	datarw.SaveMeetings(meetings)
 
-}
-
-func deleteEmptyMeeting(meetings []entity.Meeting) []entity.Meeting {
-	var newMeetings []entity.Meeting
-
-	for _, meeting := range meetings { //当会议成员不为空时，保留会议
-		if len(meeting.Participators) != 0 {
-			newMeetings = append(newMeetings, meeting)
-		}
-	}
-
-	return newMeetings
 }
