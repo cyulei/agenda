@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/cyulei/agenda/datarw"
 	"github.com/spf13/cobra"
@@ -27,17 +29,29 @@ var logoutCmd = &cobra.Command{
 	Short: "User log out",
 	Long:  `User log out, input command mode like : logout`,
 	Run: func(cmd *cobra.Command, args []string) {
+		//log
+		fileName := "datarw/Agenda.log"
+		logFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+		defer logFile.Close()
+		if err != nil {
+			log.Fatalln("Open file error")
+		}
+		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
+		infoLog.Println("Cmd logout called")
 
 		//确定当前是登陆状态
 		curUser := datarw.GetCurUser()
 		if curUser == nil {
+			infoLog.SetPrefix("[Error]")
+			infoLog.Println("User is not logged in")
 			fmt.Println("Please log in first!")
 			return
 		}
 		datarw.SaveCurUser(nil)
 		fmt.Println("Logout success!")
 		//登出
-
+		infoLog.SetPrefix("[Error]")
+		infoLog.Println(curUser.Name + " logout success")
 	},
 }
 

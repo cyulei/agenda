@@ -52,3 +52,24 @@
 [Info]2018/10/31 13:30:10 cancelmeeting.go:64: cancelmeeting called
 [Info]2018/10/31 13:35:26 cancelmeeting.go:64: cancelmeeting called
 [Error]2018/10/31 13:35:26 cancelmeeting.go:91: not log in when cancelmeeting
+[Info]2018/10/31 07:17:44 login.go:41: Cmd login called
+[Error]2018/10/31 07:17:44 login.go:74:  log in failed, username don't exist 
+[Info]2018/10/31 07:17:56 login.go:41: Cmd login called
+[Info]2018/10/31 07:17:56 login.go:63: hh log in success
+[Info]2018/10/31 07:18:19 login.go:41: Cmd login called
+[Error]2018/10/31 07:18:19 login.go:50: hh log in failed, already other user logged in
+[Info]2018/10/31 07:18:25 logout.go:40: Cmd logout called
+[Error]2018/10/31 07:18:25 logout.go:54: hh logout success
+[Info]2018/10/31 07:18:26 logout.go:40: Cmd logout called
+[Info]2018/10/31 07:27:10 login.go:41: Cmd login called
+[Error]2018/10/31 07:27:10 login.go:74: Log in failed, username don't exist 
+[Info]2018/10/31 07:27:18 login.go:41: Cmd login called
+[Info]2018/10/31 07:27:18 login.go:63: hh log in success
+[Info]2018/10/31 07:27:19 login.go:41: Cmd login called
+[Error]2018/10/31 07:27:19 login.go:50: hh log in failed, already other user logged in
+[Info]2018/10/31 07:27:24 login.go:41: Cmd login called
+[Error]2018/10/31 07:27:24 login.go:50: hh1 log in failed, already other user logged in
+[Info]2018/10/31 07:27:28 logout.go:40: Cmd logout called
+[Error]2018/10/31 07:27:28 logout.go:54: hh logout success
+[Info]2018/10/31 07:27:30 logout.go:40: Cmd logout called
+[Error]2018/10/31 07:27:30 logout.go:46: User is not logged in

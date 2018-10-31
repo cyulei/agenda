@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/cyulei/agenda/datarw"
 	"github.com/spf13/cobra"
@@ -27,12 +29,25 @@ var loginCmd = &cobra.Command{
 	Short: "User log in",
 	Long:  `User log in, input command mode like : login -u username -p password`,
 	Run: func(cmd *cobra.Command, args []string) {
+
+		//log
+		fileName := "datarw/Agenda.log"
+		logFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+		defer logFile.Close()
+		if err != nil {
+			log.Fatalln("Open file error")
+		}
+		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
+		infoLog.Println("Cmd login called")
+
 		username, _ := cmd.Flags().GetString("username")
 		password, _ := cmd.Flags().GetString("password")
 		//fmt.Println(username, password)
 		curUser := datarw.GetCurUser()
 		if curUser != nil {
 			fmt.Println("Already logged in!Please log out first!")
+			infoLog.SetPrefix("[Error]")
+			infoLog.Println(username + " log in failed, already other user logged in")
 			return
 		}
 		//检测是否已经存在用户
@@ -44,13 +59,19 @@ var loginCmd = &cobra.Command{
 					//标示用户已经登陆
 					fmt.Println("Login success!")
 					datarw.SaveCurUser(&users[i])
+					infoLog.SetPrefix("[Info]")
+					infoLog.Println(username + " log in success")
 					return
 				}
+				infoLog.SetPrefix("[Error]")
+				infoLog.Println(username + " log in failed, password erorr ")
 				fmt.Println("Password erorr!")
 				return
 			}
 		}
 		fmt.Println("Username don't exist!Please register.")
+		infoLog.SetPrefix("[Error]")
+		infoLog.Println("Log in failed, username don't exist ")
 	},
 }
 

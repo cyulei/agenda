@@ -9,9 +9,32 @@
 可在help后添加相应的命令名字，如`agenda help login`即可显示`login`命令的相关帮助
 
 ### agenda login
+用户登录。用户登陆需要提供用户名和密码，只有在没有登陆的状态下，用户名注册过且密码存在则登陆成功。
+
+使用范例：(already log out) 
+```
+agenda login -u username1 -p password
+```
+
+可用参数列表
+```
+  -h, --help              help for login
+  -p, --password string   user password
+  -u, --username string   user name
+```
 
 ### agenda logout
+用户登出。用户登出不用使用任何参数，在已经登陆的情况下可以退出成功。
 
+使用范例：(already log in) 
+```
+agenda logout
+```
+
+可用参数列表
+```
+  -h, --help   help for logout
+```
 ### agenda register
 
 ### agenda queryuser
