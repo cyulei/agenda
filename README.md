@@ -36,10 +36,54 @@ agenda logout
   -h, --help   help for logout
 ```
 ### agenda register
+用户注册。注册新用户时，用户需设置一个唯一的用户名和一个密码。另外，还需登记邮箱及电话信息。
 
+
+
+使用范例：
+```
+agenda register -n username1 -p password
+```
+
+可用参数列表
+```
+  -h, --help              help for register
+  -n, --name string       user's name
+  -p, --password string   user's password
+```
 ### agenda queryuser
+用户查询。
+已登录的用户可以查看已注册的所有用户的用户名、邮箱及电话信息。
+使用参数-n，可以查询单个用户
 
+使用范例：（已登录）
+```
+agenda queryuser                //查询所有用户
+agenda queryuser -n username1   //查询单个用户
+```
+
+可用参数列表
+```
+  -h, --help          help for queryuser
+  -n, --name string   user's name
+```
 ### agenda deleteuser
+用户删除
+已登录的用户可以删除本用户账户（即销号）。
+以该用户为 发起者 的会议将被删除
+以该用户为 参与者 的会议将从 参与者 列表中移除该用户。若因此造成会议 参与者 人数为0，则会议也将被删除。
+
+使用范例：（已登录）
+```
+agenda deleteuser
+```
+
+
+可用参数列表
+```
+  -h, --help   help for deleteuser
+```
+
 
 ### agenda createmeeting
 
