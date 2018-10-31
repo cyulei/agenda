@@ -17,6 +17,7 @@ package cmd
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/cyulei/agenda/datarw"
 	"github.com/cyulei/agenda/entity"
@@ -26,13 +27,16 @@ import (
 // querymeetingCmd represents the querymeeting command
 var querymeetingCmd = &cobra.Command{
 	Use:   "querymeeting",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Using the start date, the end date, the title, whether it's limited to the current user's four options, you can choose to use any combination of the four options, or not to use any options, which will filter out all the meetings",
+	Long: `query meetings limited by start date or end date or title or current user,any of the four limitation can be added or not added.datarw
+	For example:
+	agenda querymeeting
+	agenda querymeeting -t title
+	agenda querymeeting -s 2018-10-25-14:20
+	agenda querymeeting -e 2018-10-25-14:20
+	agenda querymeeting -a
+	you can combine any of above to start your query
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("querymeeting called")
 		runQuery()
@@ -46,8 +50,8 @@ var query_all bool
 func init() {
 	rootCmd.AddCommand(querymeetingCmd)
 	querymeetingCmd.Flags().StringVarP(&query_title, "title", "t", "", "the title you want to query")
-	querymeetingCmd.Flags().StringVarP(&query_sDate, "start time", "s", "", "format yyyy-mm-dd-hh:mm")
-	querymeetingCmd.Flags().StringVarP(&query_eDate, "end time", "e", "", "format yyyy-mm-dd-hh:mm")
+	querymeetingCmd.Flags().StringVarP(&query_sDate, "start time", "s", "", "format yyyy-mm-dd-hh-mm")
+	querymeetingCmd.Flags().StringVarP(&query_eDate, "end time", "e", "", "format yyyy-mm-dd-hh-mm")
 	querymeetingCmd.Flags().BoolVarP(&query_all, "all user or current user", "a", false, "query meetings "+
 		"all user has been appeared,if you want query for current user,please don't use it")
 	// Here you will define your flags and configuration settings.
@@ -73,7 +77,7 @@ func runQuery() {
 	//var time_limited = false
 	var start_limited = false
 	var end_limited = false
-	var usr_limited = query_all
+	var usr_limited = !query_all
 	var usr_logged = usr != nil
 
 	var sdate = entity.Date{}
@@ -90,21 +94,26 @@ func runQuery() {
 	}
 	//time_limited = start_limited || end_limited
 
-	if len(query_sDate) != 16 && start_limited || len(query_eDate) != 16 && end_limited {
+	/*if len(query_sDate) != 16 && start_limited || len(query_eDate) != 16 && end_limited {
 		println("date format error,yyyy-mm-dd-hh:mm")
 		return
-	}
+	}*/
 	//func date
 	if start_limited {
 		var err, err1, err2, err3, err4 error
-		sdate.Year, err = strconv.Atoi((string)(query_sDate[0:4]))
-		sdate.Month, err1 = strconv.Atoi(query_sDate[5:7])
-		sdate.Day, err2 = strconv.Atoi(query_sDate[8:10])
-		sdate.Hour, err3 = strconv.Atoi(query_sDate[11:13])
-		sdate.Minute, err4 = strconv.Atoi(query_sDate[14:16])
+		sep := strings.Split(query_sDate, "-")
+		if len(sep) != 5 {
+			println("date format error,yyyy-mm-dd-hh-mm")
+			return
+		}
+		sdate.Year, err = strconv.Atoi((string)(sep[0]))
+		sdate.Month, err1 = strconv.Atoi(sep[1])
+		sdate.Day, err2 = strconv.Atoi(sep[2])
+		sdate.Hour, err3 = strconv.Atoi(sep[3])
+		sdate.Minute, err4 = strconv.Atoi(sep[4])
 
 		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
-			println("date format error,yyyy-mm-dd-hh:mm")
+			println("date format error,yyyy-mm-dd-hh-mm while checking start date")
 			return
 		}
 		if !entity.IsValid(sdate) {
@@ -115,14 +124,17 @@ func runQuery() {
 	}
 	if end_limited {
 		var err, err1, err2, err3, err4 error
-		edate.Year, err = strconv.Atoi((string)(query_eDate[0:4]))
-		edate.Month, err1 = strconv.Atoi(query_eDate[5:7])
-		edate.Day, err2 = strconv.Atoi(query_eDate[8:10])
-		edate.Hour, err3 = strconv.Atoi(query_eDate[11:13])
-		edate.Minute, err4 = strconv.Atoi(query_eDate[14:16])
-
+		sep := strings.Split(query_eDate, "-")
+		if len(sep) != 5 {
+			println("date format error,yyyy-mm-dd-hh-mm,check if you mistake the number of  elements")
+		}
+		sdate.Year, err = strconv.Atoi((string)(sep[0]))
+		sdate.Month, err1 = strconv.Atoi(sep[1])
+		sdate.Day, err2 = strconv.Atoi(sep[2])
+		sdate.Hour, err3 = strconv.Atoi(sep[3])
+		sdate.Minute, err4 = strconv.Atoi(sep[4])
 		if err != nil || err1 != nil || err2 != nil || err3 != nil || err4 != nil {
-			println("date format error,yyyy-mm-dd-hh:mm")
+			println("date format error,yyyy-mm-dd-hh-mm")
 			return
 		}
 		if entity.IsValid(edate) {
@@ -172,29 +184,35 @@ func runQuery() {
 func DisplayMeeting(mt []entity.Meeting) {
 
 	standardMeetingLength := 12
-	standardNameLength := 8
+	standardNameLength := 12
+
 	//standardTimeLength := 16
 	println("-----------------Display Meeting---------------------------")
-	println("Title\t\tSponsor\t\tStart Time\t\tEnd Time\t\tParticipators")
+	println("Title       Sponsor     Start Time\t\tEnd Time\t\tParticipators")
 	for _, meeting := range mt {
+
+		typed := 0
 		print(meeting.Title)
-		for j := 4; j <= standardMeetingLength; j += 4 {
-			if len(meeting.Title) < j {
-				for k := j - 4; k < standardMeetingLength; k += 4 {
-					print("\t")
-				}
+		typed += len(meeting.Title)
+
+		for {
+			if typed >= standardMeetingLength {
 				break
 			}
+			typed++
+			print(" ")
+
 		}
 		//print("\t\t")
+		last := typed
 		print(meeting.Sponsor)
-		for j := 4; j <= standardNameLength; j += 4 {
-			if len(meeting.Sponsor) < j {
-				for k := j - 4; k < standardNameLength; k += 4 {
-					print("\t")
-				}
+		typed += len(meeting.Sponsor)
+		for {
+			if typed >= last+standardNameLength {
 				break
 			}
+			typed++
+			print(" ")
 		}
 		//print("\n")
 		sd := meeting.Startdate

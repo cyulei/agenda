@@ -24,15 +24,15 @@ import (
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
 	Use:   "login -u [username] -p [password]",
-	Short: "log in",
-	Long:  `Input command mode like : login -u username -p password`,
+	Short: "User log in",
+	Long:  `User log in, input command mode like : login -u username -p password`,
 	Run: func(cmd *cobra.Command, args []string) {
 		username, _ := cmd.Flags().GetString("username")
 		password, _ := cmd.Flags().GetString("password")
 		//fmt.Println(username, password)
 		curUser := datarw.GetCurUser()
 		if curUser != nil {
-			fmt.Println("It's logged in!Please log out!")
+			fmt.Println("Already logged in!Please log out first!")
 			return
 		}
 		//检测是否已经存在用户
@@ -46,10 +46,11 @@ var loginCmd = &cobra.Command{
 					datarw.SaveCurUser(&users[i])
 					return
 				}
-				fmt.Println("Password erorr")
+				fmt.Println("Password erorr!")
+				return
 			}
 		}
-		fmt.Println("Username don't exist")
+		fmt.Println("Username don't exist!Please register.")
 	},
 }
 
