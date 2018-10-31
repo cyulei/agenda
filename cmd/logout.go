@@ -24,14 +24,14 @@ import (
 // logoutCmd represents the logout command
 var logoutCmd = &cobra.Command{
 	Use:   "logout",
-	Short: "log out",
-	Long:  `Input command mode like : logout`,
+	Short: "User log out",
+	Long:  `User log out, input command mode like : logout`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		//确定当前是登陆状态
 		curUser := datarw.GetCurUser()
 		if curUser == nil {
-			fmt.Println("Please log in!")
+			fmt.Println("Please log in first!")
 			return
 		}
 		datarw.SaveCurUser(nil)

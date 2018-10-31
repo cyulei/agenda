@@ -16,6 +16,8 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"strconv"
 
 	"github.com/cyulei/agenda/datarw"
@@ -29,14 +31,28 @@ var info_show bool
 var clearmeetingCmd = &cobra.Command{
 	Use:   "clearmeeting",
 	Short: "Current user can clear meetings which he sponsors",
-	Long: `Current user can clear all meetings that he sponsors. For example:\n
-		clearmeeting -i clear all meetings and print titles of meeting being deleted`,
+	Long: `Current user can clear all meetings that he sponsors. For example:
+clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 	Run: func(cmd *cobra.Command, args []string) {
+		//log
+		fileName := "datarw/Agenda.log"
+		logFile, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
+		defer logFile.Close()
+		if err != nil {
+			log.Fatalln("Open file error")
+		}
+		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
+		infoLog.Println("Cmd clearmeeting called")
+
 		var delete_meetings []string
 		//get current user
 		current_user := datarw.GetCurUser()
 		if current_user == nil {
+			infoLog.SetPrefix("[Error]")
+			infoLog.Println("Not log in yet")
 			fmt.Println("Please log first")
+			infoLog.Println("Cmd clearmeeting failed")
+			fmt.Println("Cmd clearmeeting failed")
 			return
 		}
 		//get all existed meetings
@@ -56,6 +72,8 @@ var clearmeetingCmd = &cobra.Command{
 				fmt.Println("deletemeeting" + strconv.Itoa(i) + ": " + j)
 			}
 		}
+		infoLog.SetPrefix("[Info]")
+		infoLog.Println("Cmd clearmeeting finished")
 		fmt.Println("clearmeeting finished")
 
 	},
