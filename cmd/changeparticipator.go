@@ -49,7 +49,6 @@ changeparticipator -t xxx(meeting-title) -d/-a xxx-xxx-xxx`,
 			log.Fatalln("Open file error")
 		}
 		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
-		infoLog.Println("Cmd changeparticipator called")
 
 		//current user
 		current_user := datarw.GetCurUser()
@@ -61,6 +60,7 @@ changeparticipator -t xxx(meeting-title) -d/-a xxx-xxx-xxx`,
 			fmt.Println("changeparticipator failed")
 			return
 		}
+		infoLog.Println("Current User: " + current_user.Name + ", Cmd changeparticipator called")
 
 		change_participators := strings.Split(participator_name, "-") //change name list
 		meetings := datarw.GetMeetings()                              //all meetings
@@ -138,7 +138,7 @@ changeparticipator -t xxx(meeting-title) -d/-a xxx-xxx-xxx`,
 			}
 		}
 		infoLog.SetPrefix("[Info]")
-		infoLog.Println("Cmd changeparticipator finished")
+		infoLog.Println("Current User: " + current_user.Name + ", Cmd changeparticipator finished")
 		fmt.Println("changeparticipator finished")
 	},
 }

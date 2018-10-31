@@ -42,7 +42,6 @@ clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 			log.Fatalln("Open file error")
 		}
 		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
-		infoLog.Println("Cmd clearmeeting called")
 
 		var delete_meetings []string
 		//get current user
@@ -55,6 +54,7 @@ clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 			fmt.Println("Cmd clearmeeting failed")
 			return
 		}
+		infoLog.Println("Current User: " + current_user.Name + ", Cmd clearmeeting called")
 		//get all existed meetings
 		meetings := datarw.GetMeetings()
 		//meetings after delete
@@ -73,7 +73,7 @@ clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 			}
 		}
 		infoLog.SetPrefix("[Info]")
-		infoLog.Println("Cmd clearmeeting finished")
+		infoLog.Println("Current User: " + current_user.Name + ", Cmd clearmeeting finished")
 		fmt.Println("clearmeeting finished")
 
 	},
