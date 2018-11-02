@@ -27,7 +27,9 @@ import (
 var logoutCmd = &cobra.Command{
 	Use:   "logout",
 	Short: "User log out",
-	Long:  `User log out, input command mode like : logout`,
+	Long: `logout：Users logged out and could not operate after landing.
+	For example: 
+	agenda logout`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//log
 		fileName := "datarw/Agenda.log"

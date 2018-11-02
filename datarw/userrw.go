@@ -11,12 +11,14 @@ import (
 	"github.com/cyulei/agenda/entity"
 )
 
+var UsersfilePath string = "./datarw/Users.json"
+var CurUserfilePath string = "./datarw/CurUser.json"
+
 // GetUsers get a []entity.User from a file
 func GetUsers() []entity.User {
-	filePath := "datarw/Users.json"
 	var users []entity.User
-	if existFile(filePath) {
-		josnStr, err := ioutil.ReadFile(filePath)
+	if existFile(UsersfilePath) {
+		josnStr, err := ioutil.ReadFile(UsersfilePath)
 		checkError(err)
 		//检查是否是空文件
 		str := strings.Replace(string(josnStr), "\n", "", 1)
@@ -33,28 +35,26 @@ func GetUsers() []entity.User {
 
 // SaveUsers save a []entity.User to a file
 func SaveUsers(usersToSave []entity.User) {
-	filePath := "datarw/Users.json"
 	//清空原文件
-	os.Truncate(filePath, 0)
+	os.Truncate(UsersfilePath, 0)
 
 	//转为json串
 	josnStr, err := json.Marshal(usersToSave)
 	checkError(err)
-	err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
+	err = ioutil.WriteFile(UsersfilePath, josnStr, os.ModeAppend)
 	checkError(err)
 	//开放文件权限
-	os.Chmod(filePath, 0777)
+	os.Chmod(UsersfilePath, 0777)
 }
 
 // GetCurUser get a *entity.User from a file
 func GetCurUser() *entity.User {
-	filePath := "datarw/CurUser.json"
 
 	var user entity.User
 
-	if existFile(filePath) {
+	if existFile(CurUserfilePath) {
 		//读取Json串
-		josnStr, err := ioutil.ReadFile(filePath)
+		josnStr, err := ioutil.ReadFile(CurUserfilePath)
 		checkError(err)
 		//检查是否是空文件
 		str := strings.Replace(string(josnStr), "\n", "", 1)
@@ -75,18 +75,17 @@ func GetCurUser() *entity.User {
 
 // SaveCurUser save a entity.User to a file
 func SaveCurUser(userToSave *entity.User) {
-	filePath := "datarw/CurUser.json"
 	//清空原文件
-	os.Truncate(filePath, 0)
+	os.Truncate(CurUserfilePath, 0)
 
 	if userToSave != nil {
 		//转为json串
 		josnStr, err := json.Marshal(userToSave)
 		checkError(err)
-		err = ioutil.WriteFile(filePath, josnStr, os.ModeAppend)
+		err = ioutil.WriteFile(CurUserfilePath, josnStr, os.ModeAppend)
 		checkError(err)
 		//开放文件权限
-		os.Chmod(filePath, 0777)
+		os.Chmod(CurUserfilePath, 0777)
 	}
 
 }

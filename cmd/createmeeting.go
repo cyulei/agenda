@@ -37,9 +37,10 @@ var (
 var createmeetingCmd = &cobra.Command{
 	Use:   "createmeeting",
 	Short: "Create a meeting",
-	Long: `Current user can create a meeting. You should provide meeting title, start date and end date of this meeting
-and all participators. For example:
-createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`,
+	Long: `createmeeting:Current user can create a meeting. You should provide meeting title, start date and end date of this meeting
+and all participators. 
+	For example:
+	agenda createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//log
 		fileName := "datarw/Agenda.log"

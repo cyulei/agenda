@@ -27,8 +27,11 @@ import (
 // exitmeetingCmd represents the exitmeeting command
 var exitmeetingCmd = &cobra.Command{
 	Use:   "exitmeeting",
-	Short: "exit meeting , you must login first , if you are the sponser of the meeting,it'll be canceled without assertain",
-	Long:  ``,
+	Short: "Exit from the meeting as a member.",
+	Long: `exitmeeting : you must login first , if you are the sponser of the meeting,it'll be canceled without assertain.
+	For example:
+	agenda exitmeeting -t=title1
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//flag.Parse()
 		runExit()

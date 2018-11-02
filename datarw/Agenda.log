@@ -73,3 +73,41 @@
 [Error]2018/10/31 07:27:28 logout.go:54: hh logout success
 [Info]2018/10/31 07:27:30 logout.go:40: Cmd logout called
 [Error]2018/10/31 07:27:30 logout.go:46: User is not logged in
+[Info]2018/10/31 23:04:51 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:09:06 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:10:09 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:10:09 deleteuser.go:66: cmd: register called
+[Info]2018/10/31 23:10:46 deleteuser.go:66: Registration complete
+[Info]2018/10/31 23:12:25 login.go:41: Cmd login called
+[Info]2018/10/31 23:12:25 login.go:63: user1 log in success
+[Info]2018/10/31 23:12:37 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:12:37 deleteuser.go:64: curUser: user1  cmd: queryuser called
+[Info]2018/10/31 23:12:37 deleteuser.go:64: curUser: user1  cmd: queryuser success
+[Info]2018/10/31 23:12:51 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:12:51 deleteuser.go:64: curUser: user1  cmd: deleteuser called
+[Info]2018/10/31 23:12:51 deleteuser.go:64: curUser: user1  cmd: deleteuser success
+[Info]2018/10/31 23:16:07 deleteuser.go:58: Cmd deleteuser called
+[Error]2018/10/31 23:16:07 deleteuser.go:66: isn't login,please use command login
+[Info]2018/10/31 23:16:37 login.go:41: Cmd login called
+[Info]2018/10/31 23:16:37 login.go:63: hh1 log in success
+[Info]2018/10/31 23:16:40 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:16:40 deleteuser.go:64: curUser: hh1  cmd: queryuser called
+[Info]2018/10/31 23:16:40 deleteuser.go:64: curUser: hh1  cmd: queryuser success
+[Info]2018/10/31 23:18:13 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:18:13 deleteuser.go:66: cmd: register called
+[Warning]2018/10/31 23:18:24 deleteuser.go:66: email is invaild
+[Warning]2018/10/31 23:18:24 deleteuser.go:66: Register fail
+[Info]2018/10/31 23:18:53 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:18:53 deleteuser.go:66: cmd: register called
+[Warning]2018/10/31 23:19:21 deleteuser.go:66: email is invaild
+[Warning]2018/10/31 23:19:21 deleteuser.go:66: Register fail
+[Info]2018/10/31 23:19:53 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:19:53 deleteuser.go:66: cmd: register called
+[Warning]2018/10/31 23:20:08 deleteuser.go:66: email is invaild
+[Warning]2018/10/31 23:20:08 deleteuser.go:66: Register fail
+[Info]2018/10/31 23:21:45 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:21:45 deleteuser.go:66: cmd: register called
+[Info]2018/10/31 23:21:53 deleteuser.go:66: Registration complete
+[Info]2018/10/31 23:54:17 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/10/31 23:54:17 deleteuser.go:64: curUser: hh1  cmd: queryuser called
+[Info]2018/10/31 23:54:17 deleteuser.go:64: curUser: hh1  cmd: queryuser success

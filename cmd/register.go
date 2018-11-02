@@ -30,13 +30,11 @@ var registerName, registerPassword string
 // registerCmd represents the register command
 var registerCmd = &cobra.Command{
 	Use:   "register",
-	Short: "register a new User",
-	Long: `register:register a new User
-
+	Short: "Register a new User",
+	Long: `register:Users are registered through username passwords and phone and email.
 	For example:
 	register a new user,with name:User1,password:12345678
 	agenda register -n=User1 -p=12345678 
-	
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 
@@ -53,51 +51,45 @@ func init() {
 }
 
 func register(name string, password string) {
+	logInit()
+	defer logFile.Close()
+	logSave("cmd: register called", "[Info]")
 
 	if isValidName(name) && isValidPassword(password) {
-
+		users := datarw.GetUsers()
+		if entity.HasUser(name, users) {
+			logSave("The username has been registered", "[Warning]")
+			logSave("Register fail", "[Warning]")
+			return
+		}
 		var email, phone string
-		fmt.Println("please input your email:")
+		fmt.Println("please input your email:(xxx@xx.xx)")
 		fmt.Scanln(&email)
-		fmt.Println("please input your phone:")
+		for !isValidEmail(email) {
+			fmt.Println("please input your email, and input the correct format:(xxx@xx.xx)")
+			fmt.Scanln(&email)
+		}
+		fmt.Println("please input your phone:(for example 11011912010)")
 		fmt.Scanln(&phone)
-
-		if isValidEmail(email) && isValidPhone(phone) {
-			users := datarw.GetUsers()
-			if !hasName(name, users) {
-				newuser := entity.User{Name: name, Password: password, Email: email, Phone: phone}
-				users = append(users, newuser)
-				datarw.SaveUsers(users)
-				fmt.Println("Registration complete")
-				return
-
-			}
-
+		for !isValidPhone(phone) {
+			fmt.Println("please input your phone,and input the correct format:(for example 11011912010)")
+			fmt.Scanln(&phone)
 		}
-
+		newuser := entity.User{Name: name, Password: password, Email: email, Phone: phone}
+		users = append(users, newuser)
+		datarw.SaveUsers(users)
+		logSave("Registration complete", "[Info]")
+		return
 	}
-
-	fmt.Println("Register fail")
+	logSave("Register fail", "[Warning]")
 
 }
 
-//Judge username exists
-func hasName(name string, users []entity.User) bool {
-
-	for _, user := range users {
-		if user.Name == name {
-			fmt.Println("The Username has been registered")
-			return true
-		}
-	}
-
-	return false
-}
 func isValidName(n string) bool {
 	b := []byte(n)
 	val, _ := regexp.Match(".+", b)
 	if !val {
-		fmt.Println("flag -n ,name is invaild")
+		logSave("flag -n ,name is invaild", "[Warning]")
 	}
 	return val
 }
@@ -109,7 +101,7 @@ func isValidPassword(p string) bool {
 		val = false
 	}
 	if !val {
-		fmt.Println("flag -p ,password is invaild")
+		logSave("flag -p ,password is invaild", "[Warning]")
 	}
 	return val
 }
@@ -118,17 +110,17 @@ func isValidEmail(e string) bool {
 	val, _ := regexp.Match("\\w*@\\w*\\.w*", b)
 
 	if !val {
-		fmt.Println("email is invaild")
+		logSave("email is invaild", "[Warning]")
 	}
 	return val
 }
 func isValidPhone(p string) bool {
 	b := []byte(p)
 
-	val, _ := regexp.Match("[0-9]+", b)
+	val, _ := regexp.Match("\\d{11}", b)
 
 	if !val {
-		fmt.Println("phone is invaild")
+		logSave("phone is invaild", "[Warning]")
 	}
 	return val
 }

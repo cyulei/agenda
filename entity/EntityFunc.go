@@ -1,6 +1,8 @@
 package entity
 
-import "strconv"
+import (
+	"strconv"
+)
 
 func IsParticipatorinList(name string, participators []string) bool {
 	for _, j := range participators {
@@ -9,6 +11,26 @@ func IsParticipatorinList(name string, participators []string) bool {
 		}
 	}
 	return false
+}
+
+//HasUser ：
+//users 是否有名为name 的User
+func HasUser(name string, users []User) bool {
+	return IsParticipatorExist(name, users)
+}
+
+//DeleteEmptyMeeting ：
+//删除所有无参与者的会议
+func DeleteEmptyMeeting(meetings []Meeting) []Meeting {
+	var newMeetings []Meeting
+
+	for _, meeting := range meetings { //当会议成员不为空时，保留会议
+		if len(meeting.Participators) != 0 {
+			newMeetings = append(newMeetings, meeting)
+		}
+	}
+
+	return newMeetings
 }
 
 func IsParticipatorExist(name string, participators []User) bool {

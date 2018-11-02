@@ -29,8 +29,8 @@ import (
 // querymeetingCmd represents the querymeeting command
 var querymeetingCmd = &cobra.Command{
 	Use:   "querymeeting",
-	Short: "Using the start date, the end date, the title, whether it's limited to the current user's four options, you can choose to use any combination of the four options, or not to use any options, which will filter out all the meetings",
-	Long: `query meetings limited by start date or end date or title or current user,any of the four limitation can be added or not added.datarw
+	Short: "Query meeting notes can see the details of the meeting.",
+	Long: `querymeeting: Query meetings limited by start date or end date or title or current user,any of the four limitation can be added or not added.datarw
 	For example:
 	agenda querymeeting
 	agenda querymeeting -t title

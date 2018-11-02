@@ -25,9 +25,11 @@ import (
 
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
-	Use:   "login -u [username] -p [password]",
+	Use:   "login -n [username] -p [password]",
 	Short: "User log in",
-	Long:  `User log in, input command mode like : login -u username -p password`,
+	Long: `login : Login with username and password.
+	For example: 
+	agenda login -n username -p password`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		//log
@@ -87,6 +89,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// loginCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	loginCmd.Flags().StringP("username", "u", "", "user name")
+	loginCmd.Flags().StringP("username", "n", "", "user name")
 	loginCmd.Flags().StringP("password", "p", "", "user password")
 }

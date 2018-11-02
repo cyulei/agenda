@@ -36,10 +36,10 @@ var (
 var changeparticipatorCmd = &cobra.Command{
 	Use:   "changeparticipator",
 	Short: "Current user can change participators of a meeting",
-	Long: `Current user can change participators of a meeting he sponsors. The adding process
-need date checks, that is to say participators need to have free time for this meeting.
-If a meeting has no participators after this cmd, this meeting will be deleted. For exanple:
-changeparticipator -t xxx(meeting-title) -d/-a xxx-xxx-xxx`,
+	Long: `changeparticipator:Current user can change participators of a meeting he sponsors. The adding process need date checks, that is to say participators need to have free time for this meeting. If a meeting has no participators after this cmd, this meeting will be deleted. 
+	For exanple:
+	agenda changeparticipator -t xxx(meeting-title) -d/-a xxx-xxx-xxx
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//log
 		fileName := "datarw/Agenda.log"
