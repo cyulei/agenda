@@ -30,13 +30,11 @@ var registerName, registerPassword string
 // registerCmd represents the register command
 var registerCmd = &cobra.Command{
 	Use:   "register",
-	Short: "register a new User",
-	Long: `register:register a new User
-
+	Short: "Register a new User",
+	Long: `register:Users are registered through username passwords and phone and email.
 	For example:
 	register a new user,with name:User1,password:12345678
 	agenda register -n=User1 -p=12345678 
-	
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 

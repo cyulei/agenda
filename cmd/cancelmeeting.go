@@ -29,8 +29,11 @@ import (
 // cancelmeetingCmd represents the cancelmeeting command
 var cancelmeetingCmd = &cobra.Command{
 	Use:   "cancelmeeting",
-	Short: "cancel meeting,you must login first and be the sponser of the meeting",
-	Long:  ``,
+	Short: "Cancellation of a meeting will delete the meeting.",
+	Long: `cancelmeeting:If the founder of the conference can cancel the meeting through the title, the meeting will be deleted.
+	For example:
+	agenda cancelmeeting -t title1
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cancelRun()
 		fmt.Println("cancelmeeting called")
