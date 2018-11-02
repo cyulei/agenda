@@ -1,7 +1,15 @@
-# Go-agenda
+# Go版本agenda开发项目
+对于该项目具体的实现以及相关包的使用见博客：https://blog.csdn.net/C486C/article/details/83663022
+## 安装使用
+获取agenda项目，并安装
+```
+go get github.com/cyulei/agenda 
+go install github.com/cyulei/agenda
+```
+安装可能会出现`cannot find package "golang.org/x/..."`，这时候需要安装相应的Go工具，见[博客](https://blog.csdn.net/C486C/article/details/82871020)中安装Go工具部分。
 
+## 命令介绍
 以下是agenda中的所有命令介绍：
-
 ### agenda help
 
 显示所有可用命令。
