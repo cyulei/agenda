@@ -5,6 +5,9 @@ go:
   - 1.9.x
   - 1.10.x
   - master
+before_install:
+- go get github.com/spf13/cobra
+- go get github.com/modood/table
 
 script:
-- go test ./entity/...
+- go test ./...
