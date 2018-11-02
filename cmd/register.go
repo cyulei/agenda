@@ -55,33 +55,33 @@ func init() {
 func register(name string, password string) {
 	logInit()
 	defer logFile.Close()
-
 	logSave("cmd: register called", "[Info]")
 
 	if isValidName(name) && isValidPassword(password) {
-
-		var email, phone string
-		fmt.Println("please input your email:")
-		fmt.Scanln(&email)
-		fmt.Println("please input your phone:")
-		fmt.Scanln(&phone)
-
-		if isValidEmail(email) && isValidPhone(phone) {
-			users := datarw.GetUsers()
-			if !entity.HasUser(name, users) {
-				newuser := entity.User{Name: name, Password: password, Email: email, Phone: phone}
-				users = append(users, newuser)
-				datarw.SaveUsers(users)
-				logSave("Registration complete", "[Info]")
-
-				return
-
-			} else {
-				logSave("The Username has been registered", "[Warning]")
-			}
-
+		users := datarw.GetUsers()
+		if entity.HasUser(name, users) {
+			logSave("The username has been registered", "[Warning]")
+			logSave("Register fail", "[Warning]")
+			return
 		}
-
+		var email, phone string
+		fmt.Println("please input your email:(xxx@xx.xx)")
+		fmt.Scanln(&email)
+		for !isValidEmail(email) {
+			fmt.Println("please input your email, and input the correct format:(xxx@xx.xx)")
+			fmt.Scanln(&email)
+		}
+		fmt.Println("please input your phone:(for example 11011912010)")
+		fmt.Scanln(&phone)
+		for !isValidPhone(phone) {
+			fmt.Println("please input your phone,and input the correct format:(for example 11011912010)")
+			fmt.Scanln(&phone)
+		}
+		newuser := entity.User{Name: name, Password: password, Email: email, Phone: phone}
+		users = append(users, newuser)
+		datarw.SaveUsers(users)
+		logSave("Registration complete", "[Info]")
+		return
 	}
 	logSave("Register fail", "[Warning]")
 
@@ -119,7 +119,7 @@ func isValidEmail(e string) bool {
 func isValidPhone(p string) bool {
 	b := []byte(p)
 
-	val, _ := regexp.Match("[0-9]+", b)
+	val, _ := regexp.Match("\\d{11}", b)
 
 	if !val {
 		logSave("phone is invaild", "[Warning]")
