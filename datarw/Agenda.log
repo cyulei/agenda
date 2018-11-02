@@ -111,3 +111,78 @@
 [Info]2018/10/31 23:54:17 deleteuser.go:58: Cmd deleteuser called
 [Info]2018/10/31 23:54:17 deleteuser.go:64: curUser: hh1  cmd: queryuser called
 [Info]2018/10/31 23:54:17 deleteuser.go:64: curUser: hh1  cmd: queryuser success
+[Info]2018/11/02 15:24:38 logout.go:42: Cmd logout called
+[Error]2018/11/02 15:24:38 logout.go:56: hh1 logout success
+[Info]2018/11/02 15:24:41 login.go:43: Cmd login called
+[Error]2018/11/02 15:24:41 login.go:76: Log in failed, username don't exist 
+[Info]2018/11/02 15:25:37 login.go:43: Cmd login called
+[Info]2018/11/02 15:25:37 login.go:65: hh1 log in success
+[Info]2018/11/02 15:26:13 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/11/02 15:26:13 deleteuser.go:64: curUser: hh1  cmd: queryuser called
+[Info]2018/11/02 15:26:13 deleteuser.go:64: curUser: hh1  cmd: queryuser success
+[Info]2018/11/02 15:26:26 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/11/02 15:26:26 deleteuser.go:64: curUser: hh1  cmd: queryuser called
+[Info]2018/11/02 15:26:26 deleteuser.go:64: curUser: hh1  cmd: queryuser success
+[Info]2018/11/02 15:27:36 logout.go:42: Cmd logout called
+[Error]2018/11/02 15:27:36 logout.go:56: hh1 logout success
+[Info]2018/11/02 15:28:07 login.go:43: Cmd login called
+[Info]2018/11/02 15:28:07 login.go:65: hh1 log in success
+[Info]2018/11/02 15:29:35 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/11/02 15:29:35 deleteuser.go:64: curUser: hh1  cmd: deleteuser called
+[Info]2018/11/02 15:29:35 deleteuser.go:64: curUser: hh1  cmd: deleteuser success
+[Info]2018/11/02 15:30:00 deleteuser.go:58: Cmd deleteuser called
+[Error]2018/11/02 15:30:00 deleteuser.go:66: isn't login,please use command login
+[Info]2018/11/02 15:33:08 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/11/02 15:33:08 deleteuser.go:66: cmd: register called
+[Info]2018/11/02 15:33:32 deleteuser.go:66: Registration complete
+[Info]2018/11/02 15:33:39 deleteuser.go:58: Cmd deleteuser called
+[Error]2018/11/02 15:33:39 deleteuser.go:66: isn't login,please use command login
+[Info]2018/11/02 15:33:55 login.go:43: Cmd login called
+[Info]2018/11/02 15:33:55 login.go:65: hh log in success
+[Info]2018/11/02 15:33:57 deleteuser.go:58: Cmd deleteuser called
+[Info]2018/11/02 15:33:57 deleteuser.go:64: curUser: hh  cmd: queryuser called
+[Info]2018/11/02 15:33:57 deleteuser.go:64: curUser: hh  cmd: queryuser success
+[Info]2018/11/02 15:34:51 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:37:04 createmeeting.go:63: Current User: hh, Cmd createmeeting called
+[Info]2018/11/02 15:37:04 createmeeting.go:116: Current User: hh, Cmd createmeeting finished
+[Info]2018/11/02 15:37:09 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:38:20 changeparticipator.go:63: Current User: hh, Cmd changeparticipator called
+[Info]2018/11/02 15:38:20 changeparticipator.go:141: Current User: hh, Cmd changeparticipator finished
+[Info]2018/11/02 15:38:30 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:38:34 changeparticipator.go:63: Current User: hh, Cmd changeparticipator called
+[Info]2018/11/02 15:38:34 changeparticipator.go:141: Current User: hh, Cmd changeparticipator finished
+[Info]2018/11/02 15:38:36 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:39:27 createmeeting.go:63: Current User: hh, Cmd createmeeting called
+[Info]2018/11/02 15:39:27 createmeeting.go:116: Current User: hh, Cmd createmeeting finished
+[Info]2018/11/02 15:39:59 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:40:03 clearmeeting.go:59: Current User: hh, Cmd clearmeeting called
+[Info]2018/11/02 15:40:03 clearmeeting.go:78: Current User: hh, Cmd clearmeeting finished
+[Info]2018/11/02 15:42:07 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:42:50 createmeeting.go:63: Current User: hh, Cmd createmeeting called
+[Info]2018/11/02 15:42:50 createmeeting.go:116: Current User: hh, Cmd createmeeting finished
+[Info]2018/11/02 15:44:10 changeparticipator.go:63: Current User: hh, Cmd changeparticipator called
+[Warning]2018/11/02 15:44:10 changeparticipator.go:99: Some users don't exist in this meeting
+[Info]2018/11/02 15:44:10 changeparticipator.go:141: Current User: hh, Cmd changeparticipator finished
+[Info]2018/11/02 15:44:21 createmeeting.go:63: Current User: hh, Cmd createmeeting called
+[Info]2018/11/02 15:44:21 createmeeting.go:116: Current User: hh, Cmd createmeeting finished
+[Info]2018/11/02 15:44:34 changeparticipator.go:63: Current User: hh, Cmd changeparticipator called
+[Info]2018/11/02 15:44:34 changeparticipator.go:141: Current User: hh, Cmd changeparticipator finished
+[Info]2018/11/02 15:44:42 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:44:47 logout.go:42: Cmd logout called
+[Error]2018/11/02 15:44:47 logout.go:56: hh logout success
+[Info]2018/11/02 15:44:58 login.go:43: Cmd login called
+[Info]2018/11/02 15:44:58 login.go:65: hh2 log in success
+[Info]2018/11/02 15:45:30 exitmeeting.go:125: exitmeeting called
+[Info]2018/11/02 15:45:37 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:46:07 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:46:58 logout.go:42: Cmd logout called
+[Error]2018/11/02 15:46:58 logout.go:56: hh2 logout success
+[Info]2018/11/02 15:47:09 login.go:43: Cmd login called
+[Info]2018/11/02 15:47:09 login.go:65: hh log in success
+[Info]2018/11/02 15:47:24 changeparticipator.go:63: Current User: hh, Cmd changeparticipator called
+[Info]2018/11/02 15:47:24 changeparticipator.go:141: Current User: hh, Cmd changeparticipator finished
+[Info]2018/11/02 15:47:27 changeparticipator.go:63: Current User: hh, Cmd changeparticipator called
+[Info]2018/11/02 15:47:27 changeparticipator.go:141: Current User: hh, Cmd changeparticipator finished
+[Info]2018/11/02 15:47:36 querymeeting.go:77: querymeeting called
+[Info]2018/11/02 15:47:50 cancelmeeting.go:67: cancelmeeting called
+[Info]2018/11/02 15:47:54 querymeeting.go:77: querymeeting called

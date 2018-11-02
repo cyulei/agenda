@@ -1,12 +1,61 @@
-# Go-agenda
+# Go版本agenda开发项目
+对于该项目具体的实现以及相关包的使用见博客：https://blog.csdn.net/C486C/article/details/83663022
+## 安装使用
+获取agenda项目，并安装
+```
+go get github.com/cyulei/agenda 
+go install github.com/cyulei/agenda
+```
+安装可能会出现`cannot find package "golang.org/x/..."`，这时候需要安装相应的Go工具，见[博客](https://blog.csdn.net/C486C/article/details/82871020)中安装Go工具部分。
 
+## 目录结构
+```
+│  .gitignore                 git配置文件
+│  .travis.yml                Travis CI需要的配置文件  
+│  LICENSE                    cobra License 
+│  main.go                    cobra生成的main文件
+│  README.md                  README
+│  
+├─cmd                         命令具体实现
+│      cancelmeeting.go       取消会议
+│      changeparticipator.go  增删参与人员
+│      clearmeeting.go        清除所有会议
+│      createmeeting.go       创建会议
+│      deleteuser.go          删除用户
+│      exitmeeting.go         退出会议
+│      login.go               登录
+│      logout.go              登出
+│      querymeeting.go        查询会议
+│      queryuser.go           查询用户
+│      register.go            用户注册
+│      root.go                cobra生成的root文件
+│      
+├─datarw                      数据存取
+│      Agenda.log             log日志
+│      CurUser.json           保存当前登录的用户
+│      meetingrw.go           会议的Json文件存取接口
+│      Meetings.json          会议的Json文件
+│      userrw.go              用户的Json文件存取接口
+│      Users.json             用户的Json文件
+│      
+├─entity                      实体
+│      Date.go                日期实体
+│      EntityFunc.go          实体和命令的接口
+│      EntityFunc_test.go     test函数
+│      Meeting.go             会议实体
+│      User.go                用户实体
+│      
+└─test_pic                    测试样例中的图片
+```
+## 命令介绍
 以下是agenda中的所有命令介绍：
-
 ### agenda help
 
 显示所有可用命令。
 
 可在help后添加相应的命令名字，如`agenda help login`即可显示`login`命令的相关帮助
+
+![help](https://github.com/kevinli36/agenda/raw/master/test_pic/help.JPG)
 
 ### agenda login
 用户登录。用户登陆需要提供用户名和密码，只有在没有登陆的状态下，用户名注册过且密码正确则登陆成功。
@@ -22,6 +71,7 @@ agenda login -n username1 -p password
   -p, --password string   user password
   -n, --username string   user name
 ```
+![login](https://github.com/kevinli36/agenda/raw/master/test_pic/login.JPG)
 
 ### agenda logout
 用户登出。用户登出不用使用任何参数，在已经登陆的情况下可以退出成功。
@@ -35,10 +85,10 @@ agenda logout
 ```
   -h, --help   help for logout
 ```
+![logout](https://github.com/kevinli36/agenda/raw/master/test_pic/logout.JPG)
+
 ### agenda register
 用户注册。注册新用户时，用户需设置一个唯一的用户名和一个密码。另外，还需登记邮箱及电话信息。
-
-
 
 使用范例：
 ```
@@ -51,6 +101,8 @@ agenda register -n username1 -p password
   -n, --name string       user's name
   -p, --password string   user's password
 ```
+![register](https://github.com/kevinli36/agenda/raw/master/test_pic/register.JPG)
+
 ### agenda queryuser
 用户查询。
 已登录的用户可以查看已注册的所有用户的用户名、邮箱及电话信息。
@@ -67,6 +119,8 @@ agenda queryuser -n username1   //查询单个用户
   -h, --help          help for queryuser
   -n, --name string   user's name
 ```
+![queryuser](https://github.com/kevinli36/agenda/raw/master/test_pic/queryuser.JPG)
+
 ### agenda deleteuser
 用户删除
 已登录的用户可以删除本用户账户（即销号）。
@@ -78,12 +132,11 @@ agenda queryuser -n username1   //查询单个用户
 agenda deleteuser
 ```
 
-
 可用参数列表
 ```
   -h, --help   help for deleteuser
 ```
-
+![deleteuser](https://github.com/kevinli36/agenda/raw/master/test_pic/deleteuser.JPG)
 
 ### agenda createmeeting
 
@@ -102,6 +155,7 @@ agenda createmeeting -t m1 -s 2008-11-11-11-11 -e 2008-11-11-12-12 -p p1-p2-p3
   -s, --start string   meeting start date
   -t, --title string   meeting title
 ```
+![createmeeting](https://github.com/kevinli36/agenda/raw/master/test_pic/createmeeting.JPG)
 
 ### agenda changeparticipator
 
@@ -121,6 +175,7 @@ agenda changeparticipator -t m1 (-a) -d -p p1-p2
   -p, --name string    participator's name
   -t, --title string   meeting title
 ```
+![changeparticipator](https://github.com/kevinli36/agenda/raw/master/test_pic/changeparticipator.JPG)
 
 ### agenda clearmeeting
 
@@ -136,6 +191,7 @@ agenda clearmeeting (-i)
   -h, --help   help for clearmeeting
   -i, --info   show meetings cleared
 ```
+![clearmeeting](https://github.com/kevinli36/agenda/raw/master/test_pic/clearmeeting.JPG)
 
 ### agenda cancelmeeting
 
@@ -145,6 +201,8 @@ agenda clearmeeting (-i)
 ```
    agenda cancelmeeting -t health
 ```
+![cancelmeeting](https://github.com/kevinli36/agenda/raw/master/test_pic/cancelmeeting.JPG)
+
 ### agenda querymeeting
 
   查询会议并打印，参数：-a,-s 开始日期, -e 结束日期,
@@ -177,6 +235,8 @@ agenda clearmeeting (-i)
   
   注意：  -a,-s,-t可以随意套用
 
+![querymeeting](https://github.com/kevinli36/agenda/raw/master/test_pic/querymeeting.JPG)
+
 ### agenda exitmeeting
 
   退出作为参与者的会议，如果是会议发起者，那么删除,必须先登录
@@ -185,4 +245,4 @@ agenda clearmeeting (-i)
 ```
     agenda exitmeeting -t title
 ```
-    
+![exitmeeting](https://github.com/kevinli36/agenda/raw/master/test_pic/exitmeeting.JPG)
