@@ -13,14 +13,14 @@
 
 使用范例：(already log out) 
 ```
-agenda login -u username1 -p password
+agenda login -n username1 -p password
 ```
 
 可用参数列表
 ```
   -h, --help              help for login
   -p, --password string   user password
-  -u, --username string   user name
+  -n, --username string   user name
 ```
 
 ### agenda logout
