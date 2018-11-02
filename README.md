@@ -8,6 +8,45 @@ go install github.com/cyulei/agenda
 ```
 安装可能会出现`cannot find package "golang.org/x/..."`，这时候需要安装相应的Go工具，见[博客](https://blog.csdn.net/C486C/article/details/82871020)中安装Go工具部分。
 
+## 目录结构
+```
+│  .gitignore                 git配置文件
+│  .travis.yml                Travis CI需要的配置文件  
+│  LICENSE                    cobra License 
+│  main.go                    cobra生成的main文件
+│  README.md                  README
+│  
+├─cmd                         命令具体实现
+│      cancelmeeting.go       取消会议
+│      changeparticipator.go  增删参与人员
+│      clearmeeting.go        清除所有会议
+│      createmeeting.go       创建会议
+│      deleteuser.go          删除用户
+│      exitmeeting.go         退出会议
+│      login.go               登录
+│      logout.go              登出
+│      querymeeting.go        查询会议
+│      queryuser.go           查询用户
+│      register.go            用户注册
+│      root.go                cobra生成的root文件
+│      
+├─datarw                      数据存取
+│      Agenda.log             log日志
+│      CurUser.json           保存当前登录的用户
+│      meetingrw.go           会议的Json文件存取接口
+│      Meetings.json          会议的Json文件
+│      userrw.go              用户的Json文件存取接口
+│      Users.json             用户的Json文件
+│      
+├─entity                      实体
+│      Date.go                日期实体
+│      EntityFunc.go          实体和命令的接口
+│      EntityFunc_test.go     test函数
+│      Meeting.go             会议实体
+│      User.go                用户实体
+│      
+└─test_pic                    测试样例中的图片
+```
 ## 命令介绍
 以下是agenda中的所有命令介绍：
 ### agenda help
