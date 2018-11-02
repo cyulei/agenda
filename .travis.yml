@@ -10,4 +10,4 @@ before_install:
 - go get github.com/modood/table
 
 script:
-- go test ./...
+- go test ./entity
