@@ -1,5 +1,9 @@
 # Go版本agenda开发项目
+
+[![Build Status](https://travis-ci.org/cyulei/agenda.svg?branch=master)](https://travis-ci.org/cyulei/agenda)
+
 对于该项目具体的实现以及相关包的使用见博客：https://blog.csdn.net/C486C/article/details/83663022
+
 ## 安装使用
 获取agenda项目，并安装
 ```
